@@ -1,9 +1,8 @@
 #include "Orderbook.h"
 
 
-int main {
+int main() {
     Orderbook orderbook;
-
     return 0;
 }
 

@@ -1,1 +1,0 @@
-. "/Users/averyclapp/Documents/Coding/GitProjects/Orderbook/build/conanbuildenv-release-x86_64.sh"

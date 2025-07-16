@@ -3,12 +3,12 @@
 #include <algorithm>
 #include <iostream>
 #include <vector>
+#include "LevelInfo.h"
+#include "Using.h"
+#include "OrderbookLevels.h"
+#include "Order.h"
 
-class OrderbookLevels {
-    private:
-        LevelInfos m_bids;
-        LevelInfos m_asks;
-    public:
-        const int get_bids() const { return m_bids; }
-        const int get_asks() const { return m_asks; }
-}
+
+
+clas 
+

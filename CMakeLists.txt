@@ -1,8 +1,25 @@
 cmake_minimum_required(VERSION 3.15)
 project(MyProject)
 
-#find_package(Boost REQUIRED)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(myapp orderbook.cpp)
+set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -Wall -Wextra")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
+add_executable(myapp 
+    main.cpp 
+    orderbook.cpp
+)
+
+set(HEADERS
+    Direction.h
+    LevelInfo.h
+    OrderType.h
+    Orderbook.h
+    Using.h
+)
+
+target_sources(myapp PRIVATE ${HEADERS})

@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/myapp.dir/main.cpp.o"
+  "CMakeFiles/myapp.dir/main.cpp.o.d"
   "CMakeFiles/myapp.dir/orderbook.cpp.o"
   "CMakeFiles/myapp.dir/orderbook.cpp.o.d"
   "myapp"
