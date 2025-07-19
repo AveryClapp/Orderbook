@@ -5,15 +5,18 @@
 #include "OrderbookLevels.h"
 #include "Using.h"
 #include <algorithm>
+#include <exception>
 #include <iostream>
 #include <vector>
 
 class Orderbook {
 private:
-  OrderbookLevels m_levels
+  OrderbookLevels levels_;
 
-      void
-      update_level_info(const Order &order);
+  void update_level_info(const Order &order);
+
+  bool handle_buy(const Order &order);
+  bool handle_sell(const Order &order);
 
 public:
   Orderbook() = default;

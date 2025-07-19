@@ -5,8 +5,8 @@
 
 class OrderbookLevels {
 private:
-  LevelInfos m_bids;
-  LevelInfos m_asks;
+  LevelInfos bids_;
+  LevelInfos asks_;
 
 public:
   const LevelInfos &get_bids() const { return m_bids; }
