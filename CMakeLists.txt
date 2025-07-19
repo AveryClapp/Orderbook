@@ -11,15 +11,18 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(myapp 
     main.cpp 
-    orderbook.cpp
+    Orderbook.cpp
+    OrderbookLevels.cpp
 )
 
 set(HEADERS
     Direction.h
+    OrderbookLevels.h
     LevelInfo.h
     OrderType.h
     Orderbook.h
     Using.h
+    Order.h
 )
 
 target_sources(myapp PRIVATE ${HEADERS})

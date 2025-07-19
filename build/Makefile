@@ -129,6 +129,54 @@ myapp/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/build
 .PHONY : myapp/fast
 
+Orderbook.o: Orderbook.cpp.o
+.PHONY : Orderbook.o
+
+# target to build an object file
+Orderbook.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/Orderbook.cpp.o
+.PHONY : Orderbook.cpp.o
+
+Orderbook.i: Orderbook.cpp.i
+.PHONY : Orderbook.i
+
+# target to preprocess a source file
+Orderbook.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/Orderbook.cpp.i
+.PHONY : Orderbook.cpp.i
+
+Orderbook.s: Orderbook.cpp.s
+.PHONY : Orderbook.s
+
+# target to generate assembly for a file
+Orderbook.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/Orderbook.cpp.s
+.PHONY : Orderbook.cpp.s
+
+OrderbookLevels.o: OrderbookLevels.cpp.o
+.PHONY : OrderbookLevels.o
+
+# target to build an object file
+OrderbookLevels.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/OrderbookLevels.cpp.o
+.PHONY : OrderbookLevels.cpp.o
+
+OrderbookLevels.i: OrderbookLevels.cpp.i
+.PHONY : OrderbookLevels.i
+
+# target to preprocess a source file
+OrderbookLevels.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/OrderbookLevels.cpp.i
+.PHONY : OrderbookLevels.cpp.i
+
+OrderbookLevels.s: OrderbookLevels.cpp.s
+.PHONY : OrderbookLevels.s
+
+# target to generate assembly for a file
+OrderbookLevels.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/OrderbookLevels.cpp.s
+.PHONY : OrderbookLevels.cpp.s
+
 main.o: main.cpp.o
 .PHONY : main.o
 
@@ -153,30 +201,6 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/main.cpp.s
 .PHONY : main.cpp.s
 
-orderbook.o: orderbook.cpp.o
-.PHONY : orderbook.o
-
-# target to build an object file
-orderbook.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/orderbook.cpp.o
-.PHONY : orderbook.cpp.o
-
-orderbook.i: orderbook.cpp.i
-.PHONY : orderbook.i
-
-# target to preprocess a source file
-orderbook.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/orderbook.cpp.i
-.PHONY : orderbook.cpp.i
-
-orderbook.s: orderbook.cpp.s
-.PHONY : orderbook.s
-
-# target to generate assembly for a file
-orderbook.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/orderbook.cpp.s
-.PHONY : orderbook.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -186,12 +210,15 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... myapp"
+	@echo "... Orderbook.o"
+	@echo "... Orderbook.i"
+	@echo "... Orderbook.s"
+	@echo "... OrderbookLevels.o"
+	@echo "... OrderbookLevels.i"
+	@echo "... OrderbookLevels.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
-	@echo "... orderbook.o"
-	@echo "... orderbook.i"
-	@echo "... orderbook.s"
 .PHONY : help
 
 
