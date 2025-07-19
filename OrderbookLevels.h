@@ -5,12 +5,12 @@
 
 class OrderbookLevels {
 private:
-  LevelInfos bids_;
-  LevelInfos asks_;
+  LevelInfos<std::greater<Price>> bids_;
+  LevelInfos<std::less<Price>> asks_;
 
 public:
-  const LevelInfos &get_bids() const { return m_bids; }
-  const LevelInfos &get_asks() const { return m_asks; }
+  const LevelInfos<std::greater<Price>> &get_bids() const { return bids_; }
+  const LevelInfos<std::less<Price>> &get_asks() const { return asks_; }
 
   const void add_bid(const Order &bid);
   const void add_ask(const Order &ask);

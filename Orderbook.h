@@ -15,8 +15,11 @@ private:
 
   void update_level_info(const Order &order);
 
-  bool handle_buy(const Order &order);
-  bool handle_sell(const Order &order);
+  void handle_buy(const Order &order);
+  void handle_sell(const Order &order);
+
+  void add_bid(const Order &bid);
+  void add_ask(const Order &ask);
 
 public:
   Orderbook() = default;
