@@ -33,10 +33,10 @@ void Orderbook::handle_buy(Order &buy_order) {
         break;
       }
     } else {
-      break; // No other orders will fulfill our requirements
+      break;
     }
   }
-  // Second pass for updating levelinfos
+
   for (const auto &update : updates) {
     if (update.second == 0) {
       asks.erase(update.first);
@@ -46,7 +46,7 @@ void Orderbook::handle_buy(Order &buy_order) {
   }
 
   if (buy_order.getRemainingQuantity() > 0) {
-    levels_.add_ask(buy_order);
+    levels_.add_bid(buy_order);
   }
 }
 
@@ -60,6 +60,7 @@ void Orderbook::handle_sell(Order &sell_order) {
     if (level_price >= sell_order.getPrice()) {
       Quantity max_quantity = std::min(remaining_quantity, level.second);
 
+      // Can't update remaining_quantity like this
       sell_order.remaining_quantity_ -= max_quantity;
       updates.emplace_back({level_price, level.second - max_quantity)};
       if (sell_order.remaining_quantity == 0) {
@@ -71,7 +72,7 @@ void Orderbook::handle_sell(Order &sell_order) {
   }
 
   for (const auto &update : updates) {
-    if (update.second == 1) {
+    if (update.second == 0) {
       bids.erase(update.first);
     } else {
       bids[update.first] = update.second;
@@ -79,6 +80,6 @@ void Orderbook::handle_sell(Order &sell_order) {
   }
 
   if (sell_order.getRemainingQuantity() > 0) {
-    levels_.add_ask(buy_order);
+    levels_.add_ask(sell_order);
   }
 }
