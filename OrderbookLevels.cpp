@@ -1,22 +1,27 @@
 #include "OrderbookLevels.h"
 
-void OrderbookLevels::add_ask(const &Order ask) {
+void OrderbookLevels::add_ask(const *Order ask) {
   // First check if we have this level already
   Level *target_level;
   auto it = level_map_.find(ask.price);
-  if (it != orders_.end()) {
+  if (it != level_map_.end()) {
     target_level = it->second;
   } else {
+    add_level(ask);
   }
-
-  asks_.emplace({ask.getPrice(), ask.getRemainingQuantity()});
 }
 
 void OrderbookLevels::add_bid(const &Order bid) {
-  bids_.emplace({bid.getPrice(), bid.getRemainingQuantity()});
+  Level *target_level;
+  auto it = level_map_.find(bid.price);
+  if (it != level_map_.end()) {
+    target_level = it->second;
+  } else {
+    add_level(bid);
+  }
 }
 
-void OrderbookLevels::add_level(Order *order) {
+void OrderbookLevels::add_level(const Order *order) {
 int case = order.getDirection() == Direction::Buy ? -1:
   1;
   Level **cur = order.getDirection() == Direction::Buy ? &bids_ : &asks_;
@@ -39,5 +44,6 @@ int case = order.getDirection() == Direction::Buy ? -1:
       }
       cur = &((*cur)->left_child);
     }
+    throw std::runtime_exception("Prices should not be equal when inserting at this point");
   }
 }

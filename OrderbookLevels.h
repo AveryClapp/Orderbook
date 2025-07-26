@@ -12,7 +12,7 @@ private:
 
   // O(1) Lookup `
   std::unordered_map<ID, Order *> order_map_;
-  std::unordered_map<Price, Level *> level_info_map_;
+  std::unordered_map<Price, Level *> level_map_;
 
   void add_level(Order *order);
 
