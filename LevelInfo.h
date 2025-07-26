@@ -1,13 +1,14 @@
 #pragma once
 
+#include "Order.h"
 #include "Using.h"
 #include <map>
 
 struct LevelInfo {
   Price price;
-  Quantity quantity;
+  LevelInfo *parent;
+  LevelInfo *left_child;
+  LevelInfo *right_child;
+  Order *tail;
+  Order *head;
 };
-
-// LevelInfos is a map sorted by price;
-template <typename Comparator>
-using LevelInfos = std::map<Price, Quantity, Comparator>;

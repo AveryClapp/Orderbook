@@ -3,7 +3,8 @@
 /**
  * Upon receiving an order, send it to a function that handles its direction.
  */
-void Orderbook::receive_order(Order &order) {
+void Orderbook::receive_message(Order &order) {
+  /* TODO: Handle CANCEL orders */
   if (order.getDirection() == Direction::Buy) {
     handle_buy(order);
   } else if (order.getDirection() == Direction::Sell) {
@@ -18,7 +19,21 @@ void Orderbook::receive_order(Order &order) {
  * and then add the buy to the bids
  */
 void Orderbook::handle_buy(Order &buy_order) {
-  auto &asks = levels_.get_asks();
+  Order *cur = this->lowest_sell_;
+  Price buy_price = buy_order.getPrice();
+  while (cur && cur->getPrice() <= buy_price) {
+    Quantity max_quantity = std::min(remaining_quantity, level.second);
+
+    Quantity order_remaining = buy_order.reduceQuantity(max_quantity);
+    Quantity ask_remaining = cur.reduceQuantity(max_quantity);
+    if (ask_remaining == 0) {
+      /* If cur is fulfilled, adjust B-tree */
+      break;
+    }
+
+    if (cur->
+  }
+
   std::vector<std::pair<Price, Quantity>> updates{};
   for (auto &level : asks) {
     Price level_price = level.first;
@@ -60,14 +75,13 @@ void Orderbook::handle_sell(Order &sell_order) {
     if (level_price >= sell_order.getPrice()) {
       Quantity max_quantity = std::min(remaining_quantity, level.second);
 
-      // Can't update remaining_quantity like this
       sell_order.remaining_quantity_ -= max_quantity;
       updates.emplace_back({level_price, level.second - max_quantity)};
       if (sell_order.remaining_quantity == 0) {
         break;
       }
     } else {
-      break; // No other orders will fulfill our requirements
+      break;
     }
   }
 

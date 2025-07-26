@@ -3,6 +3,7 @@
 #include "Direction.h"
 #include "OrderType.h"
 #include "Using.h"
+#include <cstdint>
 
 class Order {
 private:
@@ -12,13 +13,16 @@ private:
   Quantity initial_quantity_;
   Quantity remaining_quantity_;
   Time time_;
+  Order *next_order_;
+  Order *prev_order_;
   ID id_;
 
 public:
   Order(Price price, OrderType type, Direction direction, Quantity quantity,
-        Time time, ID id)
+        Time time, Order *prev_order, Order *next_order, ID id)
       : price_{price}, type_{type}, direction_{direction},
-        initial_quantity_{quantity}, remaining_quantity_{quantity}, id_{id} {
+        initial_quantity_{quantity}, remaining_quantity_{quantity},
+        prev_order_{prev_order}, next_order_{next_order}, id_{id} {
     time_ = std::chrono::system_clock::now();
   }
 
@@ -29,4 +33,9 @@ public:
   const Quantity getRemainingQuantity() const { return remaining_quantity_; }
   const Time getTime() const { return time_; }
   const ID getID() const { return id_; }
+
+  Order *getNextOrder() const;
+  Order *getPrevOrder() const;
+
+  int8_t reduceQuantity(Quantity delta);
 };
