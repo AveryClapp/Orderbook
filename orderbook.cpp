@@ -21,45 +21,19 @@ void Orderbook::receive_message(Order &order) {
 void Orderbook::handle_buy(Order &buy_order) {
   Order *cur = this->lowest_sell_;
   Price buy_price = buy_order.getPrice();
-  while (cur && cur->getPrice() <= buy_price) {
+  while (cur && -cur->getPrice() <= buy_price) {
     Quantity max_quantity = std::min(remaining_quantity, level.second);
-
     Quantity order_remaining = buy_order.reduceQuantity(max_quantity);
     Quantity ask_remaining = cur.reduceQuantity(max_quantity);
     if (ask_remaining == 0) {
-      /* If cur is fulfilled, adjust B-tree */
-      break;
+      /* If cur is fulfilled, move to next node and update level */
+      cur = cur.getNextOrder();
     }
-
-    if (cur->
-  }
-
-  std::vector<std::pair<Price, Quantity>> updates{};
-  for (auto &level : asks) {
-    Price level_price = level.first;
-    Quantity remaining_quantity = buy_order.getRemainingQuantity();
-
-    if (level_price <= buy_order.getPrice()) {
-      Quantity max_quantity = std::min(remaining_quantity, level.second);
-      // Case 1: The order is fulfilled
-      buy_order.remaining_quantity_ -= max_quantity;
-      updates.emplace_back({level_price, level.second - max_quantity)};
-      if (buy_order.getRemainingQuantity() == 0) {
-        break;
-      }
-    } else {
+    if (order_remaining == 0) {
       break;
     }
   }
-
-  for (const auto &update : updates) {
-    if (update.second == 0) {
-      asks.erase(update.first);
-    } else {
-      asks[update.first] = update.second;
-    }
-  }
-
+  // If we have unused quantity so far, then add it to the bids
   if (buy_order.getRemainingQuantity() > 0) {
     levels_.add_bid(buy_order);
   }

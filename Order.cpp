@@ -11,13 +11,15 @@ int8_t Order::reduceQuantity(Quantity delta) {
 
 /* Encapsulate B-tree traversal here */
 Order *Order::getNextOrder() const {
-  /* A few cases to handle:
-   * 1) Simple iterative movement
-   * 2) If the level is complete, replace current level with the right subtree
-   * 3) If no right subtree exists, then you go to the parent level
-   */
-  if (next_order_) {
+  if (next_order_) { // Return the next order in the level if it exists
+    cur_level_.tail = next_order_;
     return next_order_;
+  } else if (!right_child) { // Return the first element of the parent
+    return cur_level_.parent.tail;
+  } else { // If the right child exists, move that up in place of the current
+    cur_level_.parent.left_child = cur_level_.right_child;
+    cur_level_.right_child.parent = cur_level_.parent;
+    return cur_level_.right_child.tail;
   }
 }
 

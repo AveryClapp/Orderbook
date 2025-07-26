@@ -4,11 +4,11 @@
 #include "Using.h"
 #include <map>
 
-struct LevelInfo {
+struct Level {
   Price price;
-  LevelInfo *parent;
-  LevelInfo *left_child;
-  LevelInfo *right_child;
+  Level *parent;
+  Level *left_child;
+  Level *right_child;
   Order *tail;
   Order *head;
 };
