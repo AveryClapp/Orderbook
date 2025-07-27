@@ -21,18 +21,20 @@ void Orderbook::receive_message(Order &order) {
 void Orderbook::handle_buy(Order &buy_order) {
   Order *cur = this->lowest_sell_;
   Price buy_price = buy_order.getPrice();
-  while (cur && -cur->getPrice() <= buy_price) {
-    Quantity max_quantity = std::min(remaining_quantity, level.second);
+  while (cur && cur->getPrice() <= buy_price) {
+    Quantity max_quantity =
+        std::min(buy_order.getRemainingQuantity(), cur->getRemainingQuantity());
     Quantity order_remaining = buy_order.reduceQuantity(max_quantity);
-    Quantity ask_remaining = cur.reduceQuantity(max_quantity);
+    Quantity ask_remaining = cur->reduceQuantity(max_quantity);
     if (ask_remaining == 0) {
       /* If cur is fulfilled, move to next node and update level */
-      cur = cur.getNextOrder();
+      cur = cur->getNextOrder();
     }
     if (order_remaining == 0) {
       break;
     }
   }
+  this->lowest_sell_ = cur;
   // If we have unused quantity so far, then add it to the bids
   if (buy_order.getRemainingQuantity() > 0) {
     levels_.add_bid(buy_order);
@@ -40,34 +42,25 @@ void Orderbook::handle_buy(Order &buy_order) {
 }
 
 void Orderbook::handle_sell(Order &sell_order) {
-  auto &bids = levels_.get_bids();
-  std::vector<std::pair<Price, Quantity>> updates{};
-  for (const auto &level : bids) {
-    Price level_price = level.first;
-    Quantity remaining_quantity = sell_order.getRemainingQuantity();
-
-    if (level_price >= sell_order.getPrice()) {
-      Quantity max_quantity = std::min(remaining_quantity, level.second);
-
-      sell_order.remaining_quantity_ -= max_quantity;
-      updates.emplace_back({level_price, level.second - max_quantity)};
-      if (sell_order.remaining_quantity == 0) {
-        break;
-      }
-    } else {
+  Order *cur = this->highest_buy_;
+  Price sell_price = sell_order.getPrice();
+  while (cur && cur->getPrice() >= sell_price) {
+    Quantity max_quantity = std::min(sell_order.getRemainingQuantity(),
+                                     cur->getRemainingQuantity());
+    Quantity order_remaining = sell_order.reduceQuantity(max_quantity);
+    Quantity bid_remaining = cur->reduceQuantity(max_quantity);
+    if (bid_remaining == 0) {
+      /* If cur is fulfilled, move to next node and update level */
+      cur = cur->getNextOrder();
+    }
+    if (order_remaining == 0) {
       break;
     }
   }
-
-  for (const auto &update : updates) {
-    if (update.second == 0) {
-      bids.erase(update.first);
-    } else {
-      bids[update.first] = update.second;
-    }
-  }
-
+  this->highest_buy_ = cur;
+  // If we have unused quantity so far, then add it to the bids
   if (sell_order.getRemainingQuantity() > 0) {
     levels_.add_ask(sell_order);
   }
+}
 }
