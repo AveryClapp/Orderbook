@@ -64,10 +64,12 @@ CMAKE_BINARY_DIR = /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/buil
 
 # The main recursive "all" target.
 all: CMakeFiles/myapp.dir/all
+all: CMakeFiles/tests.dir/all
 .PHONY : all
 
 # The main recursive "codegen" target.
 codegen: CMakeFiles/myapp.dir/codegen
+codegen: CMakeFiles/tests.dir/codegen
 .PHONY : codegen
 
 # The main recursive "preinstall" target.
@@ -76,6 +78,7 @@ preinstall:
 
 # The main recursive "clean" target.
 clean: CMakeFiles/myapp.dir/clean
+clean: CMakeFiles/tests.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -85,12 +88,12 @@ clean: CMakeFiles/myapp.dir/clean
 CMakeFiles/myapp.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/averyclapp/Documents/Coding/GitProjects/Orderbook/build/CMakeFiles --progress-num=1,2,3,4 "Built target myapp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/averyclapp/Documents/Coding/GitProjects/Orderbook/build/CMakeFiles --progress-num=1,2,3,4,5 "Built target myapp"
 .PHONY : CMakeFiles/myapp.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/myapp.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/build/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/build/CMakeFiles 5
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/myapp.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/build/CMakeFiles 0
 .PHONY : CMakeFiles/myapp.dir/rule
@@ -102,13 +105,45 @@ myapp: CMakeFiles/myapp.dir/rule
 # codegen rule for target.
 CMakeFiles/myapp.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/averyclapp/Documents/Coding/GitProjects/Orderbook/build/CMakeFiles --progress-num=1,2,3,4 "Finished codegen for target myapp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/averyclapp/Documents/Coding/GitProjects/Orderbook/build/CMakeFiles --progress-num=1,2,3,4,5 "Finished codegen for target myapp"
 .PHONY : CMakeFiles/myapp.dir/codegen
 
 # clean rule for target.
 CMakeFiles/myapp.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/clean
 .PHONY : CMakeFiles/myapp.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/tests.dir
+
+# All Build rule for target.
+CMakeFiles/tests.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/averyclapp/Documents/Coding/GitProjects/Orderbook/build/CMakeFiles --progress-num=6,7,8,9,10 "Built target tests"
+.PHONY : CMakeFiles/tests.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/tests.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/build/CMakeFiles 5
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/tests.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/build/CMakeFiles 0
+.PHONY : CMakeFiles/tests.dir/rule
+
+# Convenience name for target.
+tests: CMakeFiles/tests.dir/rule
+.PHONY : tests
+
+# codegen rule for target.
+CMakeFiles/tests.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/averyclapp/Documents/Coding/GitProjects/Orderbook/build/CMakeFiles --progress-num=6,7,8,9,10 "Finished codegen for target tests"
+.PHONY : CMakeFiles/tests.dir/codegen
+
+# clean rule for target.
+CMakeFiles/tests.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/clean
+.PHONY : CMakeFiles/tests.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

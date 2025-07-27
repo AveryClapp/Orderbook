@@ -2,6 +2,7 @@
 
 #include "Level.h"
 #include "Order.h"
+#include "OrderbookLevels.h"
 #include "Using.h"
 #include <algorithm>
 #include <exception>
@@ -17,11 +18,11 @@ private:
 
   void update_level_info(Order &order);
 
-  void handle_buy(Order &order);
-  void handle_sell(Order &order);
+  void handle_buy(Order *order);
+  void handle_sell(Order *order);
 
 public:
   Orderbook() = default;
 
-  void receive_message(Order &order);
+  void receive_message(Order *order);
 };
