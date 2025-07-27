@@ -51,7 +51,13 @@ void Orderbook::handle_sell(Order *sell_order) {
     Quantity bid_remaining = cur->reduceQuantity(max_quantity);
     if (bid_remaining == 0) {
       /* If cur is fulfilled, move to next node and update level */
-      cur = cur->getNextOrder();
+      if (cur->isLastInLevel()) {
+        Level *next = cur->getNextLevel();
+        delete cur->getLevel();
+        cur = next->tail;
+      } else {
+        cur = cur->getNextOrder();
+      }
     }
     if (order_remaining == 0) {
       break;

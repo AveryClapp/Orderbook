@@ -16,6 +16,7 @@ private:
   std::unordered_map<Price, Level *> level_map_;
 
   void add_level(Order *order);
+  void remove_level(Order *order);
 
 public:
   Level *get_bids() { return bids_; }
@@ -24,6 +25,5 @@ public:
   void add_bid(Order *bid);
   void add_ask(Order *ask);
 
-  void cancel_bid(const ID id);
-  void cancel_ask(const ID id);
+  void cancel_order(const ID id);
 };

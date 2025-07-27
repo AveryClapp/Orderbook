@@ -18,14 +18,16 @@ Order *Order::getNextOrder() const {
   if (next_order_) { // Return the next order in the level if it exists
     cur_level_->tail = next_order_;
     return next_order_;
-  } else if (!cur_level_
-                  ->right_child) { // Return the first element of the parent
-    return cur_level_->parent->tail;
+  }
+  return nullptr;
+}
+
+Level *Order::getNextLevel(Order *order) {
+  if (!cur_level_->right_child) { // Return the first element of the parent
+    return cur_level_->parent;
   } else { // If the right child exists, move that up in place of the current
     cur_level_->parent->left_child = cur_level_->right_child;
     cur_level_->right_child->parent = cur_level_->parent;
-    return cur_level_->right_child->tail;
+    return cur_level_->right_child;
   }
 }
-
-Order *Order::getPrevOrder() const {}

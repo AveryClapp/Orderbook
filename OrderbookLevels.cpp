@@ -49,3 +49,31 @@ void OrderbookLevels::add_level(Order *order) {
         "Prices should not be equal when inserting at this point");
   }
 }
+
+void OrderbookLevels::cancel_order(const ID id) {
+  Level *target_order;
+  auto it = order_map_.find(id);
+  if (it != order_map_.end()) {
+    target_order = it->second;
+  } else {
+    throw std::runtime_error("Can not remove non-existant order id");
+  }
+  Order *next_order = target_order.getNextOrder();
+  if (!next) {
+    Level *next_level = target_order.getNextLevel();
+    remove_level(target_order->getLevel());
+  }
+}
+
+void remove_level(Level *level) {
+  if (!level->tail) {
+    delete level;
+    return;
+  }
+  Order *node = level->tail;
+  while (node) {
+    Order *temp = node.getNextOrder();
+    order_map_ delete node;
+    node = temp;
+  }
+}
