@@ -11,13 +11,12 @@ private:
   Levels bids_;
   Levels asks_;
 
-  // O(1) Lookup
   std::unordered_map<ID, Order *> order_map_;
-  std::unordered_map<Price, Level *> level_map_;
+  std::unordered_map<Price, Level *> bid_level_map_;
+  std::unordered_map<Price, Level *> ask_level_map_;
 
-  void add_level(Order *order);
-  // TODO: Do we even want to spend time removing a level?
-  void remove_level(Order *order);
+  void add_ask_level(Order *ask);
+  void add_bid_level(Order *bid);
 
 public:
   Levels &get_bids() { return bids_; }

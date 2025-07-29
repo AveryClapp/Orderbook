@@ -3,77 +3,49 @@
 void OrderbookLevels::add_ask(Order *ask) {
   // First check if we have this level already
   Level *target_level;
-  auto it = level_map_.find(ask->getPrice());
+  auto it = level_map_.find(ask->price);
   if (it != level_map_.end()) {
     target_level = it->second;
   } else {
-    add_level(ask);
+    add_ask_level(ask);
   }
 }
 
 void OrderbookLevels::add_bid(Order *bid) {
   Level *target_level;
-  auto it = level_map_.find(bid->getPrice());
+  auto it = level_map_.find(bid->price);
   if (it != level_map_.end()) {
     target_level = it->second;
   } else {
-    add_level(bid);
+    add_bid_level(bid);
   }
 }
 
-void OrderbookLevels::add_level(Order *order) {
-  int flip = order->getDirection() == Direction::Buy ? -1 : 1;
-  Level **cur = order->getDirection() == Direction::Buy ? &bids_ : &asks_;
-  Price price = order->getPrice() * flip;
-  if (!*cur) {
-    *cur = new Level{price * flip, nullptr, nullptr, nullptr, order, order};
-    return;
-  }
-  while (true) {
-    if (price > (*cur)->price * flip) {
-      if (!(*cur)->right_child) {
-        (*cur)->right_child =
-            new Level{price * flip, *cur, nullptr, nullptr, order, order};
-        return;
-      }
-      cur = &((*cur)->right_child);
-    } else {
-      if (!(*cur)->left_child) {
-        (*cur)->left_child =
-            new Level{price * flip, *cur, nullptr, nullptr, order, order};
-        return;
-      }
-      cur = &((*cur)->left_child);
+void OrderbookLevels::add_bid_level(Order *bid) {
+  Level *new_level = new Level{bid->price, 1, bid, bid};
+  for (size_t i = 0; i < bids_.size(); i++) {
+    if (bid->price < bids_[i]->price) {
+      bids_.emplace(bids_.begin() + i, new_level);
+      bid_level_map_[bid->price] = new_level;
+      return;
     }
-    throw std::runtime_error(
-        "Prices should not be equal when inserting at this point");
   }
+  bid_level_map_[bid->price] = new_level;
+  bids_.push_back(new_level);
 }
 
-void OrderbookLevels::cancel_order(const ID id) {
-  Level *target_order;
-  auto it = order_map_.find(id);
-  if (it != order_map_.end()) {
-    target_order = it->second;
-  } else {
-    throw std::runtime_error("Can not remove non-existant order id");
+void OrderbookLevels::add_ask_level(Order *ask) {
+  Level *new_level = new Level{ask->price, 1, ask, ask};
+  for (size_t i = 0; i < asks_.size(); i++) {
+    if (ask->price < asks_[i]->price) {
+      asks_.emplace(asks_.begin() + i, new_level);
+      bid_level_map_[ask->price] = new_level;
+      return;
+    }
   }
-  Order *next_order = target_order.getNextOrder();
-  if (!next) {
-    Level *next_level = target_order.getNextLevel();
-    remove_level(target_order->getLevel());
-  }
+  // This needs to be separated by bids and asks right?
+  ask_level_map_[bid->price] = new_level;
+  bids.push_back(new_level);
 }
 
-void remove_level(Level *level) {
-  if (!level->tail) {
-    delete level;
-    return;
-  }
-  Order *node = level->tail;
-  while (node) {
-    Order *temp = node.getNextOrder();
-    order_map_ delete node;
-    node = temp;
-  }
-}
+void OrderbookLevels::cancel_order(const ID id) {}

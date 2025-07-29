@@ -5,11 +5,11 @@
 #include <map>
 #include <vector>
 
+// TODO: Struct alignment, optimize padding here
 struct Level {
   Price price;
-  Level *parent;
-  Level *left_child;
-  Level *right_child;
+  size_t num_orders;
+
   Order *tail;
   Order *head;
 };
