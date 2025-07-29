@@ -8,19 +8,20 @@
 
 class OrderbookLevels {
 private:
-  Level *bids_;
-  Level *asks_;
+  Levels bids_;
+  Levels asks_;
 
-  // O(1) Lookup `
+  // O(1) Lookup
   std::unordered_map<ID, Order *> order_map_;
   std::unordered_map<Price, Level *> level_map_;
 
   void add_level(Order *order);
+  // TODO: Do we even want to spend time removing a level?
   void remove_level(Order *order);
 
 public:
-  Level *get_bids() { return bids_; }
-  Level *get_asks() { return asks_; }
+  Levels &get_bids() { return bids_; }
+  Levels &get_asks() { return asks_; }
 
   void add_bid(Order *bid);
   void add_ask(Order *ask);

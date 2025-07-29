@@ -3,6 +3,7 @@
 #include "Order.h"
 #include "Using.h"
 #include <map>
+#include <vector>
 
 struct Level {
   Price price;
@@ -12,3 +13,5 @@ struct Level {
   Order *tail;
   Order *head;
 };
+
+using Levels = std::vector<Level *>

@@ -13,9 +13,6 @@ class Orderbook {
 private:
   OrderbookLevels levels_;
 
-  Order *lowest_sell_;
-  Order *highest_buy_;
-
   void update_level_info(Order &order);
 
   void handle_buy(Order *order);
