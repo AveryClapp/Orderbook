@@ -9,14 +9,14 @@
 struct Level;
 
 struct Order {
-  Price price_;
-  OrderType type_;
-  Direction direction_;
-  Quantity initial_quantity_;
-  Quantity remaining_quantity_;
+  Price price;
+  OrderType type;
+  Direction direction;
+  Quantity initial_quantity;
+  Quantity remaining_quantity;
   Time time_;
-  Level *cur_level_;
-  Order *next_order_;
-  Order *prev_order_;
-  ID id_;
+  Level *cur_level;
+  Order *next_order;
+  Order *prev_order;
+  ID id;
 }
