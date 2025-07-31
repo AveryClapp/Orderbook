@@ -15,7 +15,7 @@ void Orderbook::receive_message(Order *order) {
 }
 
 void Orderbook::handle_buy(Order *buy_order) {
-  Levels &asks = levels_.get_asks();
+  auto &asks = levels_.get_asks();
   for (Level *l : asks) {
     if (l->price > buy_order->price) {
       break;
@@ -33,6 +33,8 @@ void Orderbook::handle_buy(Order *buy_order) {
         Level *remove = cur;
         if (remove->prev_order) {
           remove->prev_order->next_order = remove->next_order;
+        } else {
+          l->head = remove->next_order;
         }
         if (remove->next_order) {
           remove->next_order->prev_order = remove->prev_order;
@@ -45,7 +47,6 @@ void Orderbook::handle_buy(Order *buy_order) {
         break;
       }
     }
-    l->head = cur;
   }
   if (buy_order->remaining_quantity > 0) {
     levels_.add_bid(buy_order);
@@ -53,9 +54,9 @@ void Orderbook::handle_buy(Order *buy_order) {
 }
 
 void Orderbook::handle_sell(Order *sell_order) {
-  Levels &bids = levels_.get_bids();
+  auto &bids = levels_.get_bids();
   for (Level *l : bids) {
-    if (l->price > sell_order->price) {
+    if (l->price < sell_order->price) {
       break;
     }
     if (l->num_orders == 0) {
@@ -71,6 +72,8 @@ void Orderbook::handle_sell(Order *sell_order) {
         Level *remove = cur;
         if (remove->prev_order) {
           remove->prev_order->next_order = remove->next_order;
+        } else {
+          l->head = remove->next_order;
         }
         if (remove->next_order) {
           remove->next_order->prev_order = remove->prev_order;
@@ -79,18 +82,15 @@ void Orderbook::handle_sell(Order *sell_order) {
         delete remove;
         l->num_orders--;
       }
-      if (buy_order->remaining_quantity == 0) {
+      if (sell_order->remaining_quantity == 0) {
         break;
       }
     }
-    l->head = cur;
+    if (sell_order->remaining_quantity == 0) {
+      break;
+    }
   }
-  if (sell_order->remaining_quantity == 0) {
-    break;
+  if (sell_order->remaining_quantity > 0) {
+    levels_.add_ask(sell_order);
   }
-}
-}
-if (sell_order->remaining_quantity > 0) {
-  levels_.add_ask(sell_order);
-}
 }
