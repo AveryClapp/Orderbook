@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Level.h"
+#include "Message.h"
 #include "Order.h"
 #include "OrderbookLevels.h"
 #include "Using.h"

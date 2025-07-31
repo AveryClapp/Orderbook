@@ -14,4 +14,4 @@ struct Level {
   Order *head;
 };
 
-using Levels = std::vector<Level *>
+using Levels = std::vector<Level *>;

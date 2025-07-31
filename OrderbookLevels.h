@@ -18,6 +18,10 @@ private:
   void add_ask_level(Order *ask);
   void add_bid_level(Order *bid);
 
+  void handle_buy(Order *order);
+  void handle_sell(Order *order);
+  void handle_cancel(const Cancel cancel_id);
+
 public:
   Levels &get_bids() { return bids_; }
   Levels &get_asks() { return asks_; }
