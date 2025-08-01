@@ -11,20 +11,19 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 
 add_executable(myapp 
-    main.cpp 
-    Orderbook.cpp
-    OrderbookLevels.cpp
-    Order.cpp
+    src/main.cpp 
+    src/core/Orderbook.cpp
+    src/core/OrderbookLevels.cpp
 )
 
 set(HEADERS
-    Direction.h
-    OrderbookLevels.h
-    Level.h
-    OrderType.h
-    Orderbook.h
-    Using.h
-    Order.h
+    include/core/Direction.h
+    include/core/OrderbookLevels.h
+    include/core/Level.h
+    include/core/OrderType.h
+    include/core/Orderbook.h
+    include/core/Using.h
+    include/core/Order.h
 )
 
 target_sources(myapp PRIVATE ${HEADERS})
@@ -35,9 +34,8 @@ if(GTest_FOUND)
     # Tests executable - reuses your source files
     add_executable(tests
         tests/tests.cpp
-        Orderbook.cpp
-        OrderbookLevels.cpp
-        Order.cpp
+        src/core/Orderbook.cpp
+        src/core/OrderbookLevels.cpp
     )
     
     target_link_libraries(tests GTest::gtest_main)

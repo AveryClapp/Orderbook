@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Level.h"
-#include "Order.h"
-#include "Using.h"
+#include "include/core/Level.h"
+#include "include/core/Order.h"
+#include "include/core/Using.h"
 #include <stdexcept>
 #include <unordered_map>
 
@@ -18,16 +18,16 @@ private:
   void add_ask_level(Order *ask);
   void add_bid_level(Order *bid);
 
-  void handle_buy(Order *order);
-  void handle_sell(Order *order);
-  void handle_cancel(const Cancel cancel_id);
-
 public:
   Levels &get_bids() { return bids_; }
   Levels &get_asks() { return asks_; }
 
   void add_bid(Order *bid);
   void add_ask(Order *ask);
+
+  void handle_buy(Order *order);
+  void handle_sell(Order *order);
+  void handle_cancel(const ID cancel_id);
 
   void cancel_order(const ID id);
 };

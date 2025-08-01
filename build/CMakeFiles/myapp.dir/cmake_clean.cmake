@@ -1,12 +1,10 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/myapp.dir/Order.cpp.o"
-  "CMakeFiles/myapp.dir/Order.cpp.o.d"
-  "CMakeFiles/myapp.dir/Orderbook.cpp.o"
-  "CMakeFiles/myapp.dir/Orderbook.cpp.o.d"
-  "CMakeFiles/myapp.dir/OrderbookLevels.cpp.o"
-  "CMakeFiles/myapp.dir/OrderbookLevels.cpp.o.d"
-  "CMakeFiles/myapp.dir/main.cpp.o"
-  "CMakeFiles/myapp.dir/main.cpp.o.d"
+  "CMakeFiles/myapp.dir/src/core/Orderbook.cpp.o"
+  "CMakeFiles/myapp.dir/src/core/Orderbook.cpp.o.d"
+  "CMakeFiles/myapp.dir/src/core/OrderbookLevels.cpp.o"
+  "CMakeFiles/myapp.dir/src/core/OrderbookLevels.cpp.o.d"
+  "CMakeFiles/myapp.dir/src/main.cpp.o"
+  "CMakeFiles/myapp.dir/src/main.cpp.o.d"
   "myapp"
   "myapp.pdb"
 )

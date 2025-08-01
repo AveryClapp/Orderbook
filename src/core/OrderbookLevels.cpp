@@ -1,12 +1,12 @@
-#include "OrderbookLevels.h"
+#include "include/core/OrderbookLevels.h"
 #include <cassert>
 
 void OrderbookLevels::add_ask(Order *ask) {
   // First check if we have this level already
   Level *target_level;
-  auto it = level_map_.find(ask->price);
-  if (it != level_map_.end()) {
-    target_level = it->second;
+  auto it = ask_level_map_.find(ask->price);
+  if (it != ask_level_map_.end()) {
+    target_level = ask_level_map_[ask->price];
   } else {
     add_ask_level(ask);
   }
@@ -14,8 +14,8 @@ void OrderbookLevels::add_ask(Order *ask) {
 
 void OrderbookLevels::add_bid(Order *bid) {
   Level *target_level;
-  auto it = level_map_.find(bid->price);
-  if (it != level_map_.end()) {
+  auto it = bid_level_map_.find(bid->price);
+  if (it != bid_level_map_.end()) {
     target_level = it->second;
   } else {
     add_bid_level(bid);
@@ -128,7 +128,7 @@ void OrderbookLevels::handle_sell(Order *sell_order) {
   }
 }
 
-void OrderbookLevels::cancel_order(const Cancel cancel_id) {
+void OrderbookLevels::cancel_order(const ID cancel_id) {
   Order *order = order_map[cancel_id];
   if (!order) {
     throw std::runtime_error("Tried to Cancel nonexistent id");

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Level.h"
-#include "Message.h"
-#include "Order.h"
-#include "OrderbookLevels.h"
-#include "Using.h"
+#include "include/core/Level.h"
+#include "include/core/Message.h"
+#include "include/core/Order.h"
+#include "include/core/OrderbookLevels.h"
+#include "include/core/Using.h"
 #include <algorithm>
 #include <exception>
 #include <iostream>
@@ -22,5 +22,5 @@ private:
 public:
   Orderbook() = default;
 
-  void receive_message(Order *order);
+  void receive_message(Message msg);
 };

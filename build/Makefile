@@ -142,110 +142,83 @@ tests/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/build
 .PHONY : tests/fast
 
-Order.o: Order.cpp.o
-.PHONY : Order.o
+src/core/Orderbook.o: src/core/Orderbook.cpp.o
+.PHONY : src/core/Orderbook.o
 
 # target to build an object file
-Order.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/Order.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/Order.cpp.o
-.PHONY : Order.cpp.o
+src/core/Orderbook.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/src/core/Orderbook.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/src/core/Orderbook.cpp.o
+.PHONY : src/core/Orderbook.cpp.o
 
-Order.i: Order.cpp.i
-.PHONY : Order.i
+src/core/Orderbook.i: src/core/Orderbook.cpp.i
+.PHONY : src/core/Orderbook.i
 
 # target to preprocess a source file
-Order.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/Order.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/Order.cpp.i
-.PHONY : Order.cpp.i
+src/core/Orderbook.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/src/core/Orderbook.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/src/core/Orderbook.cpp.i
+.PHONY : src/core/Orderbook.cpp.i
 
-Order.s: Order.cpp.s
-.PHONY : Order.s
+src/core/Orderbook.s: src/core/Orderbook.cpp.s
+.PHONY : src/core/Orderbook.s
 
 # target to generate assembly for a file
-Order.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/Order.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/Order.cpp.s
-.PHONY : Order.cpp.s
+src/core/Orderbook.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/src/core/Orderbook.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/src/core/Orderbook.cpp.s
+.PHONY : src/core/Orderbook.cpp.s
 
-Orderbook.o: Orderbook.cpp.o
-.PHONY : Orderbook.o
+src/core/OrderbookLevels.o: src/core/OrderbookLevels.cpp.o
+.PHONY : src/core/OrderbookLevels.o
 
 # target to build an object file
-Orderbook.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/Orderbook.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/Orderbook.cpp.o
-.PHONY : Orderbook.cpp.o
+src/core/OrderbookLevels.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/src/core/OrderbookLevels.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/src/core/OrderbookLevels.cpp.o
+.PHONY : src/core/OrderbookLevels.cpp.o
 
-Orderbook.i: Orderbook.cpp.i
-.PHONY : Orderbook.i
+src/core/OrderbookLevels.i: src/core/OrderbookLevels.cpp.i
+.PHONY : src/core/OrderbookLevels.i
 
 # target to preprocess a source file
-Orderbook.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/Orderbook.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/Orderbook.cpp.i
-.PHONY : Orderbook.cpp.i
+src/core/OrderbookLevels.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/src/core/OrderbookLevels.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/src/core/OrderbookLevels.cpp.i
+.PHONY : src/core/OrderbookLevels.cpp.i
 
-Orderbook.s: Orderbook.cpp.s
-.PHONY : Orderbook.s
+src/core/OrderbookLevels.s: src/core/OrderbookLevels.cpp.s
+.PHONY : src/core/OrderbookLevels.s
 
 # target to generate assembly for a file
-Orderbook.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/Orderbook.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/Orderbook.cpp.s
-.PHONY : Orderbook.cpp.s
+src/core/OrderbookLevels.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/src/core/OrderbookLevels.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/src/core/OrderbookLevels.cpp.s
+.PHONY : src/core/OrderbookLevels.cpp.s
 
-OrderbookLevels.o: OrderbookLevels.cpp.o
-.PHONY : OrderbookLevels.o
+src/main.o: src/main.cpp.o
+.PHONY : src/main.o
 
 # target to build an object file
-OrderbookLevels.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/OrderbookLevels.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/OrderbookLevels.cpp.o
-.PHONY : OrderbookLevels.cpp.o
+src/main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/src/main.cpp.o
+.PHONY : src/main.cpp.o
 
-OrderbookLevels.i: OrderbookLevels.cpp.i
-.PHONY : OrderbookLevels.i
-
-# target to preprocess a source file
-OrderbookLevels.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/OrderbookLevels.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/OrderbookLevels.cpp.i
-.PHONY : OrderbookLevels.cpp.i
-
-OrderbookLevels.s: OrderbookLevels.cpp.s
-.PHONY : OrderbookLevels.s
-
-# target to generate assembly for a file
-OrderbookLevels.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/OrderbookLevels.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/OrderbookLevels.cpp.s
-.PHONY : OrderbookLevels.cpp.s
-
-main.o: main.cpp.o
-.PHONY : main.o
-
-# target to build an object file
-main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/main.cpp.o
-.PHONY : main.cpp.o
-
-main.i: main.cpp.i
-.PHONY : main.i
+src/main.i: src/main.cpp.i
+.PHONY : src/main.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/main.cpp.i
-.PHONY : main.cpp.i
+src/main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/src/main.cpp.i
+.PHONY : src/main.cpp.i
 
-main.s: main.cpp.s
-.PHONY : main.s
+src/main.s: src/main.cpp.s
+.PHONY : src/main.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/main.cpp.s
-.PHONY : main.cpp.s
+src/main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/src/main.cpp.s
+.PHONY : src/main.cpp.s
 
 tests/tests.o: tests/tests.cpp.o
 .PHONY : tests/tests.o
@@ -281,18 +254,15 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... myapp"
 	@echo "... tests"
-	@echo "... Order.o"
-	@echo "... Order.i"
-	@echo "... Order.s"
-	@echo "... Orderbook.o"
-	@echo "... Orderbook.i"
-	@echo "... Orderbook.s"
-	@echo "... OrderbookLevels.o"
-	@echo "... OrderbookLevels.i"
-	@echo "... OrderbookLevels.s"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
+	@echo "... src/core/Orderbook.o"
+	@echo "... src/core/Orderbook.i"
+	@echo "... src/core/Orderbook.s"
+	@echo "... src/core/OrderbookLevels.o"
+	@echo "... src/core/OrderbookLevels.i"
+	@echo "... src/core/OrderbookLevels.s"
+	@echo "... src/main.o"
+	@echo "... src/main.i"
+	@echo "... src/main.s"
 	@echo "... tests/tests.o"
 	@echo "... tests/tests.i"
 	@echo "... tests/tests.s"

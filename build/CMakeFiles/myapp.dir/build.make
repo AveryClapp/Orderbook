@@ -72,79 +72,63 @@ include CMakeFiles/myapp.dir/flags.make
 CMakeFiles/myapp.dir/codegen:
 .PHONY : CMakeFiles/myapp.dir/codegen
 
-CMakeFiles/myapp.dir/main.cpp.o: CMakeFiles/myapp.dir/flags.make
-CMakeFiles/myapp.dir/main.cpp.o: /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/main.cpp
-CMakeFiles/myapp.dir/main.cpp.o: CMakeFiles/myapp.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/averyclapp/Documents/Coding/GitProjects/Orderbook/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/myapp.dir/main.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/myapp.dir/main.cpp.o -MF CMakeFiles/myapp.dir/main.cpp.o.d -o CMakeFiles/myapp.dir/main.cpp.o -c /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/main.cpp
+CMakeFiles/myapp.dir/src/main.cpp.o: CMakeFiles/myapp.dir/flags.make
+CMakeFiles/myapp.dir/src/main.cpp.o: /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/src/main.cpp
+CMakeFiles/myapp.dir/src/main.cpp.o: CMakeFiles/myapp.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/averyclapp/Documents/Coding/GitProjects/Orderbook/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/myapp.dir/src/main.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/myapp.dir/src/main.cpp.o -MF CMakeFiles/myapp.dir/src/main.cpp.o.d -o CMakeFiles/myapp.dir/src/main.cpp.o -c /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/src/main.cpp
 
-CMakeFiles/myapp.dir/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/myapp.dir/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/main.cpp > CMakeFiles/myapp.dir/main.cpp.i
+CMakeFiles/myapp.dir/src/main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/myapp.dir/src/main.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/src/main.cpp > CMakeFiles/myapp.dir/src/main.cpp.i
 
-CMakeFiles/myapp.dir/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/myapp.dir/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/main.cpp -o CMakeFiles/myapp.dir/main.cpp.s
+CMakeFiles/myapp.dir/src/main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/myapp.dir/src/main.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/src/main.cpp -o CMakeFiles/myapp.dir/src/main.cpp.s
 
-CMakeFiles/myapp.dir/Orderbook.cpp.o: CMakeFiles/myapp.dir/flags.make
-CMakeFiles/myapp.dir/Orderbook.cpp.o: /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/Orderbook.cpp
-CMakeFiles/myapp.dir/Orderbook.cpp.o: CMakeFiles/myapp.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/averyclapp/Documents/Coding/GitProjects/Orderbook/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/myapp.dir/Orderbook.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/myapp.dir/Orderbook.cpp.o -MF CMakeFiles/myapp.dir/Orderbook.cpp.o.d -o CMakeFiles/myapp.dir/Orderbook.cpp.o -c /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/Orderbook.cpp
+CMakeFiles/myapp.dir/src/core/Orderbook.cpp.o: CMakeFiles/myapp.dir/flags.make
+CMakeFiles/myapp.dir/src/core/Orderbook.cpp.o: /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/src/core/Orderbook.cpp
+CMakeFiles/myapp.dir/src/core/Orderbook.cpp.o: CMakeFiles/myapp.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/averyclapp/Documents/Coding/GitProjects/Orderbook/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/myapp.dir/src/core/Orderbook.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/myapp.dir/src/core/Orderbook.cpp.o -MF CMakeFiles/myapp.dir/src/core/Orderbook.cpp.o.d -o CMakeFiles/myapp.dir/src/core/Orderbook.cpp.o -c /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/src/core/Orderbook.cpp
 
-CMakeFiles/myapp.dir/Orderbook.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/myapp.dir/Orderbook.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/Orderbook.cpp > CMakeFiles/myapp.dir/Orderbook.cpp.i
+CMakeFiles/myapp.dir/src/core/Orderbook.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/myapp.dir/src/core/Orderbook.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/src/core/Orderbook.cpp > CMakeFiles/myapp.dir/src/core/Orderbook.cpp.i
 
-CMakeFiles/myapp.dir/Orderbook.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/myapp.dir/Orderbook.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/Orderbook.cpp -o CMakeFiles/myapp.dir/Orderbook.cpp.s
+CMakeFiles/myapp.dir/src/core/Orderbook.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/myapp.dir/src/core/Orderbook.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/src/core/Orderbook.cpp -o CMakeFiles/myapp.dir/src/core/Orderbook.cpp.s
 
-CMakeFiles/myapp.dir/OrderbookLevels.cpp.o: CMakeFiles/myapp.dir/flags.make
-CMakeFiles/myapp.dir/OrderbookLevels.cpp.o: /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/OrderbookLevels.cpp
-CMakeFiles/myapp.dir/OrderbookLevels.cpp.o: CMakeFiles/myapp.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/averyclapp/Documents/Coding/GitProjects/Orderbook/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/myapp.dir/OrderbookLevels.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/myapp.dir/OrderbookLevels.cpp.o -MF CMakeFiles/myapp.dir/OrderbookLevels.cpp.o.d -o CMakeFiles/myapp.dir/OrderbookLevels.cpp.o -c /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/OrderbookLevels.cpp
+CMakeFiles/myapp.dir/src/core/OrderbookLevels.cpp.o: CMakeFiles/myapp.dir/flags.make
+CMakeFiles/myapp.dir/src/core/OrderbookLevels.cpp.o: /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/src/core/OrderbookLevels.cpp
+CMakeFiles/myapp.dir/src/core/OrderbookLevels.cpp.o: CMakeFiles/myapp.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/averyclapp/Documents/Coding/GitProjects/Orderbook/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/myapp.dir/src/core/OrderbookLevels.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/myapp.dir/src/core/OrderbookLevels.cpp.o -MF CMakeFiles/myapp.dir/src/core/OrderbookLevels.cpp.o.d -o CMakeFiles/myapp.dir/src/core/OrderbookLevels.cpp.o -c /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/src/core/OrderbookLevels.cpp
 
-CMakeFiles/myapp.dir/OrderbookLevels.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/myapp.dir/OrderbookLevels.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/OrderbookLevels.cpp > CMakeFiles/myapp.dir/OrderbookLevels.cpp.i
+CMakeFiles/myapp.dir/src/core/OrderbookLevels.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/myapp.dir/src/core/OrderbookLevels.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/src/core/OrderbookLevels.cpp > CMakeFiles/myapp.dir/src/core/OrderbookLevels.cpp.i
 
-CMakeFiles/myapp.dir/OrderbookLevels.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/myapp.dir/OrderbookLevels.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/OrderbookLevels.cpp -o CMakeFiles/myapp.dir/OrderbookLevels.cpp.s
-
-CMakeFiles/myapp.dir/Order.cpp.o: CMakeFiles/myapp.dir/flags.make
-CMakeFiles/myapp.dir/Order.cpp.o: /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/Order.cpp
-CMakeFiles/myapp.dir/Order.cpp.o: CMakeFiles/myapp.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/averyclapp/Documents/Coding/GitProjects/Orderbook/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/myapp.dir/Order.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/myapp.dir/Order.cpp.o -MF CMakeFiles/myapp.dir/Order.cpp.o.d -o CMakeFiles/myapp.dir/Order.cpp.o -c /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/Order.cpp
-
-CMakeFiles/myapp.dir/Order.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/myapp.dir/Order.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/Order.cpp > CMakeFiles/myapp.dir/Order.cpp.i
-
-CMakeFiles/myapp.dir/Order.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/myapp.dir/Order.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/Order.cpp -o CMakeFiles/myapp.dir/Order.cpp.s
+CMakeFiles/myapp.dir/src/core/OrderbookLevels.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/myapp.dir/src/core/OrderbookLevels.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/averyclapp/Documents/Coding/GitProjects/Orderbook/src/core/OrderbookLevels.cpp -o CMakeFiles/myapp.dir/src/core/OrderbookLevels.cpp.s
 
 # Object files for target myapp
 myapp_OBJECTS = \
-"CMakeFiles/myapp.dir/main.cpp.o" \
-"CMakeFiles/myapp.dir/Orderbook.cpp.o" \
-"CMakeFiles/myapp.dir/OrderbookLevels.cpp.o" \
-"CMakeFiles/myapp.dir/Order.cpp.o"
+"CMakeFiles/myapp.dir/src/main.cpp.o" \
+"CMakeFiles/myapp.dir/src/core/Orderbook.cpp.o" \
+"CMakeFiles/myapp.dir/src/core/OrderbookLevels.cpp.o"
 
 # External object files for target myapp
 myapp_EXTERNAL_OBJECTS =
 
-myapp: CMakeFiles/myapp.dir/main.cpp.o
-myapp: CMakeFiles/myapp.dir/Orderbook.cpp.o
-myapp: CMakeFiles/myapp.dir/OrderbookLevels.cpp.o
-myapp: CMakeFiles/myapp.dir/Order.cpp.o
+myapp: CMakeFiles/myapp.dir/src/main.cpp.o
+myapp: CMakeFiles/myapp.dir/src/core/Orderbook.cpp.o
+myapp: CMakeFiles/myapp.dir/src/core/OrderbookLevels.cpp.o
 myapp: CMakeFiles/myapp.dir/build.make
 myapp: CMakeFiles/myapp.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/averyclapp/Documents/Coding/GitProjects/Orderbook/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable myapp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/averyclapp/Documents/Coding/GitProjects/Orderbook/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable myapp"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/myapp.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
