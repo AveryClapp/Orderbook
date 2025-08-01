@@ -6,7 +6,7 @@
 void Orderbook::receive_message(Message msg) {
   if (std::holds_alternative<Cancel>(msg.data)) {
     Cancel &cancel = std::get<Cancel>(msg.data);
-    levels_.handle_cancel(std::get<Cancel>(cancel.cancel_id));
+    levels_.handle_cancel(cancel.cancel_id);
   } else if (std::holds_alternative<Order>(msg.data)) {
     Order &order = std::get<Order>(msg.data);
     if (order.direction == Direction::Buy) {

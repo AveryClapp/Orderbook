@@ -44,12 +44,12 @@ void OrderbookLevels::add_ask_level(Order *ask) {
       return;
     }
   }
-  ask_level_map_[bid->price] = new_level;
+  ask_level_map_[ask->price] = new_level;
   asks_.push_back(new_level);
 }
 
 void OrderbookLevels::handle_sell(Order *sell_order) {
-  auto &bids = levels_.get_bids();
+  auto &bids = get_bids();
   for (Level *l : bids) {
     if (l->price < sell_order->price) {
       break;
@@ -64,7 +64,7 @@ void OrderbookLevels::handle_sell(Order *sell_order) {
       sell_order->remaining_quantity -= consumed;
       cur->remaining_quantity -= consumed;
       if (cur->remaining_quantity == 0) {
-        Level *remove = cur;
+        Order *remove = cur;
         if (remove->prev_order) {
           remove->prev_order->next_order = remove->next_order;
         } else {
@@ -88,48 +88,48 @@ void OrderbookLevels::handle_sell(Order *sell_order) {
   if (sell_order->remaining_quantity > 0) {
     add_ask(sell_order);
   }
+}
 
-  void Orderbook::handle_buy(Order * buy_order) {
-    for (Level *l : asks_) {
-      if (l->price > buy_order->price) {
+void OrderbookLevels::handle_buy(Order *buy_order) {
+  for (Level *l : asks_) {
+    if (l->price > buy_order->price) {
+      break;
+    }
+    if (l->num_orders == 0) {
+      continue;
+    }
+    Order *cur = l->head;
+    while (cur) {
+      Quantity consumed =
+          std::min(cur->remaining_quantity, buy_order->remaining_quantity);
+      buy_order->remaining_quantity -= consumed;
+      cur->remaining_quantity -= consumed;
+      if (cur->remaining_quantity == 0) {
+        Order *remove = cur;
+        if (remove->prev_order) {
+          remove->prev_order->next_order = remove->next_order;
+        } else {
+          l->head = remove->next_order;
+        }
+        if (remove->next_order) {
+          remove->next_order->prev_order = remove->prev_order;
+        }
+        cur = remove->next_order;
+        delete remove;
+        l->num_orders--;
+      }
+      if (buy_order->remaining_quantity == 0) {
         break;
       }
-      if (l->num_orders == 0) {
-        continue;
-      }
-      Order *cur = l->head;
-      while (cur) {
-        Quantity consumed =
-            std::min(cur->remaining_quantity, buy_order->remaining_quantity);
-        buy_order->remaining_quantity_ -= consumed;
-        cur->remaining_quantity -= consumed;
-        if (cur->remaining_quantity_ == 0) {
-          Level *remove = cur;
-          if (remove->prev_order) {
-            remove->prev_order->next_order = remove->next_order;
-          } else {
-            l->head = remove->next_order;
-          }
-          if (remove->next_order) {
-            remove->next_order->prev_order = remove->prev_order;
-          }
-          cur = remove->next_order;
-          delete remove;
-          l->num_orders--;
-        }
-        if (buy_order->remaining_quantity == 0) {
-          break;
-        }
-      }
     }
-    if (buy_order->remaining_quantity > 0) {
-      add_bid(buy_order);
-    }
+  }
+  if (buy_order->remaining_quantity > 0) {
+    add_bid(buy_order);
   }
 }
 
 void OrderbookLevels::cancel_order(const ID cancel_id) {
-  Order *order = order_map[cancel_id];
+  Order *order = order_map_[cancel_id];
   if (!order) {
     throw std::runtime_error("Tried to Cancel nonexistent id");
   }
