@@ -1,7 +1,7 @@
 #pragma once
 
 enum class OrderType {
-    FillOrKill,
-    GoodTilCancel,
+  FillOrKill,
+  GoodTilCancel,
+  Limit,
 };
-

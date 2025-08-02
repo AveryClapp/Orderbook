@@ -128,7 +128,7 @@ void OrderbookLevels::handle_buy(Order *buy_order) {
   }
 }
 
-void OrderbookLevels::cancel_order(const ID cancel_id) {
+void OrderbookLevels::handle_cancel(const ID cancel_id) {
   Order *order = order_map_[cancel_id];
   if (!order) {
     throw std::runtime_error("Tried to Cancel nonexistent id");

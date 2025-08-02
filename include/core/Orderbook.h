@@ -23,4 +23,6 @@ public:
   Orderbook() = default;
 
   void receive_message(Message msg);
+
+  void print_book();
 };
