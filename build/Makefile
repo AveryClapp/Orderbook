@@ -220,29 +220,53 @@ src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/myapp.dir/build.make CMakeFiles/myapp.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
-tests/tests.o: tests/tests.cpp.o
-.PHONY : tests/tests.o
+tests/helpers/test_utils.o: tests/helpers/test_utils.cpp.o
+.PHONY : tests/helpers/test_utils.o
 
 # target to build an object file
-tests/tests.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/tests/tests.cpp.o
-.PHONY : tests/tests.cpp.o
+tests/helpers/test_utils.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/tests/helpers/test_utils.cpp.o
+.PHONY : tests/helpers/test_utils.cpp.o
 
-tests/tests.i: tests/tests.cpp.i
-.PHONY : tests/tests.i
+tests/helpers/test_utils.i: tests/helpers/test_utils.cpp.i
+.PHONY : tests/helpers/test_utils.i
 
 # target to preprocess a source file
-tests/tests.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/tests/tests.cpp.i
-.PHONY : tests/tests.cpp.i
+tests/helpers/test_utils.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/tests/helpers/test_utils.cpp.i
+.PHONY : tests/helpers/test_utils.cpp.i
 
-tests/tests.s: tests/tests.cpp.s
-.PHONY : tests/tests.s
+tests/helpers/test_utils.s: tests/helpers/test_utils.cpp.s
+.PHONY : tests/helpers/test_utils.s
 
 # target to generate assembly for a file
-tests/tests.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/tests/tests.cpp.s
-.PHONY : tests/tests.cpp.s
+tests/helpers/test_utils.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/tests/helpers/test_utils.cpp.s
+.PHONY : tests/helpers/test_utils.cpp.s
+
+tests/unit/test_orderbook_levels.o: tests/unit/test_orderbook_levels.cpp.o
+.PHONY : tests/unit/test_orderbook_levels.o
+
+# target to build an object file
+tests/unit/test_orderbook_levels.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/tests/unit/test_orderbook_levels.cpp.o
+.PHONY : tests/unit/test_orderbook_levels.cpp.o
+
+tests/unit/test_orderbook_levels.i: tests/unit/test_orderbook_levels.cpp.i
+.PHONY : tests/unit/test_orderbook_levels.i
+
+# target to preprocess a source file
+tests/unit/test_orderbook_levels.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/tests/unit/test_orderbook_levels.cpp.i
+.PHONY : tests/unit/test_orderbook_levels.cpp.i
+
+tests/unit/test_orderbook_levels.s: tests/unit/test_orderbook_levels.cpp.s
+.PHONY : tests/unit/test_orderbook_levels.s
+
+# target to generate assembly for a file
+tests/unit/test_orderbook_levels.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/tests/unit/test_orderbook_levels.cpp.s
+.PHONY : tests/unit/test_orderbook_levels.cpp.s
 
 # Help Target
 help:
@@ -263,9 +287,12 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
-	@echo "... tests/tests.o"
-	@echo "... tests/tests.i"
-	@echo "... tests/tests.s"
+	@echo "... tests/helpers/test_utils.o"
+	@echo "... tests/helpers/test_utils.i"
+	@echo "... tests/helpers/test_utils.s"
+	@echo "... tests/unit/test_orderbook_levels.o"
+	@echo "... tests/unit/test_orderbook_levels.i"
+	@echo "... tests/unit/test_orderbook_levels.s"
 .PHONY : help
 
 

@@ -31,15 +31,20 @@ target_sources(myapp PRIVATE ${HEADERS})
 find_package(GTest QUIET)
 
 if(GTest_FOUND)
-    # Tests executable - reuses your source files
+    file(GLOB_RECURSE TEST_SOURCES 
+         "tests/unit/*.cpp"
+         "tests/integration/*.cpp"
+         "tests/helpers/*.cpp"
+    )
     add_executable(tests
-        tests/tests.cpp
+        ${TEST_SOURCES}
         src/core/Orderbook.cpp
         src/core/OrderbookLevels.cpp
     )
-    
+
     target_link_libraries(tests GTest::gtest_main)
-    
+    target_include_directories(tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+
     message(STATUS "Tests enabled - run with './tests'")
 else()
     message(STATUS "GTest not found - tests disabled")
