@@ -3,5 +3,4 @@
 enum class OrderType {
   FillOrKill,
   GoodTilCancel,
-  Limit,
 };

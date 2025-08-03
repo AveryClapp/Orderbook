@@ -11,7 +11,6 @@ private:
   Levels bids_;
   Levels asks_;
 
-  std::unordered_map<ID, Order *> order_map_;
   std::unordered_map<Price, Level *> bid_level_map_;
   std::unordered_map<Price, Level *> ask_level_map_;
 
@@ -24,10 +23,4 @@ public:
 
   void add_bid(Order *bid);
   void add_ask(Order *ask);
-
-  void handle_buy(Order *order);
-  void handle_sell(Order *order);
-  void handle_cancel(const ID cancel_id);
-
-  void cancel_order(const ID id);
 };

@@ -1,5 +1,6 @@
 #include "include/core/Orderbook.h"
 #include <algorithm>
+#include <cassert>
 #include <ctime>
 #include <iomanip>
 #include <iostream>
@@ -10,13 +11,13 @@
 void Orderbook::receive_message(Message msg) {
   if (std::holds_alternative<Cancel>(msg.data)) {
     Cancel &cancel = std::get<Cancel>(msg.data);
-    levels_.handle_cancel(cancel.cancel_id);
+    handle_cancel(cancel.cancel_id);
   } else if (std::holds_alternative<Order>(msg.data)) {
     Order &order = std::get<Order>(msg.data);
     if (order.direction == Direction::Buy) {
-      levels_.handle_buy(&order);
+      handle_buy(&order);
     } else {
-      levels_.handle_sell(&order);
+      handle_sell(&order);
     }
   } else {
     throw std::runtime_error("Impossible Dud");
@@ -50,4 +51,104 @@ void Orderbook::print_book() {
       std::cout << std::setw(24) << "";
     }
   }
+}
+
+void Orderbook::handle_sell(Order *sell_order) {
+  auto &bids = levels_.get_bids();
+  for (Level *l : bids) {
+    if (l->price < sell_order->price) {
+      break;
+    }
+    if (l->num_orders == 0) {
+      continue;
+    }
+    Order *cur = l->head;
+    while (cur) {
+      Quantity consumed =
+          std::min(cur->remaining_quantity, sell_order->remaining_quantity);
+      sell_order->remaining_quantity -= consumed;
+      cur->remaining_quantity -= consumed;
+      if (cur->remaining_quantity == 0) {
+        Order *remove = cur;
+        if (remove->prev_order) {
+          remove->prev_order->next_order = remove->next_order;
+        } else {
+          l->head = remove->next_order;
+        }
+        if (remove->next_order) {
+          remove->next_order->prev_order = remove->prev_order;
+        }
+        cur = remove->next_order;
+        delete remove;
+        l->num_orders--;
+      }
+      if (sell_order->remaining_quantity == 0) {
+        break;
+      }
+    }
+    if (sell_order->remaining_quantity == 0) {
+      break;
+    }
+  }
+  if (sell_order->remaining_quantity > 0) {
+    levels_.add_ask(sell_order);
+  }
+}
+
+void Orderbook::handle_buy(Order *buy_order) {
+  auto &asks = levels_.get_asks();
+  for (Level *l : asks) {
+    if (l->price > buy_order->price) {
+      break;
+    }
+    if (l->num_orders == 0) {
+      continue;
+    }
+    Order *cur = l->head;
+    while (cur) {
+      Quantity consumed =
+          std::min(cur->remaining_quantity, buy_order->remaining_quantity);
+      buy_order->remaining_quantity -= consumed;
+      cur->remaining_quantity -= consumed;
+      if (cur->remaining_quantity == 0) {
+        Order *remove = cur;
+        if (remove->prev_order) {
+          remove->prev_order->next_order = remove->next_order;
+        } else {
+          l->head = remove->next_order;
+        }
+        if (remove->next_order) {
+          remove->next_order->prev_order = remove->prev_order;
+        }
+        cur = remove->next_order;
+        delete remove;
+        l->num_orders--;
+      }
+      if (buy_order->remaining_quantity == 0) {
+        break;
+      }
+    }
+  }
+  if (buy_order->remaining_quantity > 0) {
+    levels_.add_bid(buy_order);
+  }
+}
+
+void Orderbook::handle_cancel(const ID cancel_id) {
+  Order *order = order_map_[cancel_id];
+  if (!order) {
+    throw std::runtime_error("Tried to Cancel nonexistent id");
+  }
+  assert(order->id == cancel_id);
+  Order *remove = order;
+  if (remove->prev_order) {
+    remove->prev_order->next_order = remove->next_order;
+  } else {
+    remove->cur_level->head = remove->next_order;
+  }
+  if (remove->next_order) {
+    remove->next_order->prev_order = remove->prev_order;
+  }
+  remove->cur_level->num_orders--;
+  delete remove;
 }

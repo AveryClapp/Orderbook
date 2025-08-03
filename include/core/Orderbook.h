@@ -14,10 +14,11 @@ class Orderbook {
 private:
   OrderbookLevels levels_;
 
-  void update_level_info(Order &order);
+  std::unordered_map<ID, Order *> order_map_;
 
   void handle_buy(Order *order);
   void handle_sell(Order *order);
+  void handle_cancel(const ID cancel_id);
 
 public:
   Orderbook() = default;
