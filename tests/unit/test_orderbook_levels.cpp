@@ -2,7 +2,7 @@
 #include "tests/helpers/test_utils.h"
 #include <gtest/gtest.h>
 
-TEST_F(TestOrderbookLevels, TestCreateEmpty) {
+TEST(TestOrderbookLevels, TestCreateEmpty) {
   OrderbookLevels levels = OrderbookLevels();
   EXPECT_TRUE(levels.get_bids().empty());
   EXPECT_TRUE(levels.get_asks().empty());

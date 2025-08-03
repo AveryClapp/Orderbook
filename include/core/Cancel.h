@@ -1,3 +1,4 @@
+#pragma once
 #include "include/core/Using.h"
 
 struct Cancel {

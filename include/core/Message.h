@@ -1,3 +1,4 @@
+#pragma once
 #include "include/core/Cancel.h"
 #include "include/core/Order.h"
 
