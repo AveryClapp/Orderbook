@@ -2,16 +2,16 @@
 
 Order test_utils::create_order(ID id, Price price, Quantity qty,
                                Direction dir) {
-  return Order{.price = price,
-               .type = OrderType::GoodTilCancel,
-               .direction = dir,
-               .initial_quantity = qty,
-               .remaining_quantity = qty,
-               .time_ = std::chrono::system_clock::now(),
-               .cur_level = nullptr,
-               .next_order = nullptr,
-               .prev_order = nullptr,
-               .id = id};
+  return new Order{.price = price,
+                   .type = OrderType::GoodTilCancel,
+                   .direction = dir,
+                   .initial_quantity = qty,
+                   .remaining_quantity = qty,
+                   .time_ = std::chrono::system_clock::now(),
+                   .cur_level = nullptr,
+                   .next_order = nullptr,
+                   .prev_order = nullptr,
+                   .id = id};
 }
 
 Message test_utils::create_order_message(ID id, Price price, Quantity qty,
