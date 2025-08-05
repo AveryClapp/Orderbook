@@ -1,4 +1,0 @@
-/Users/averyclapp/Documents/Coding/GitProjects/Orderbook/build/CMakeFiles/myapp.dir
-/Users/averyclapp/Documents/Coding/GitProjects/Orderbook/build/CMakeFiles/tests.dir
-/Users/averyclapp/Documents/Coding/GitProjects/Orderbook/build/CMakeFiles/edit_cache.dir
-/Users/averyclapp/Documents/Coding/GitProjects/Orderbook/build/CMakeFiles/rebuild_cache.dir

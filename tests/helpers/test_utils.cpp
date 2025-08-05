@@ -1,7 +1,7 @@
 #include "tests/helpers/test_utils.h"
 
-Order test_utils::create_order(ID id, Price price, Quantity qty,
-                               Direction dir) {
+Order *test_utils::create_order(ID id, Price price, Quantity qty,
+                                Direction dir) {
   return new Order{.price = price,
                    .type = OrderType::GoodTilCancel,
                    .direction = dir,
