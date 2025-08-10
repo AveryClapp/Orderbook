@@ -152,3 +152,11 @@ void Orderbook::handle_cancel(const ID cancel_id) {
   remove->cur_level->num_orders--;
   delete remove;
 }
+
+void Orderbook::get_best_bid() {
+  auto &bids = levels_.get_bids();
+  if (!bids.size()) {
+    std::cout << "No active bids" << "\n";
+  }
+  return std::cout << "Best bid at price: " << bids[0].
+}
