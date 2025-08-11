@@ -26,4 +26,7 @@ public:
   void receive_message(Message msg);
 
   void print_book();
+
+  void get_best_bid();
+  void get_best_ask();
 };

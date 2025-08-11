@@ -7,6 +7,7 @@ TEST(TestOrderbookLevels, TestCreateEmpty) {
   EXPECT_TRUE(levels.get_bids().empty());
   EXPECT_TRUE(levels.get_asks().empty());
 }
+
 TEST(TestOrderbookLevels, TestAddAskLevel) {
   OrderbookLevels levels = OrderbookLevels();
 
@@ -21,6 +22,4 @@ TEST(TestOrderbookLevels, TestAddAskWithExistingLevel) {
   EXPECT_FALSE(levels.get_asks().empty());
 }
 
-/**
 TEST(TestOrderbookLevels, ) {}
-*/

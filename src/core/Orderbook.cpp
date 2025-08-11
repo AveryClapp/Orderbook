@@ -157,6 +157,18 @@ void Orderbook::get_best_bid() {
   auto &bids = levels_.get_bids();
   if (!bids.size()) {
     std::cout << "No active bids" << "\n";
+    return;
   }
-  return std::cout << "Best bid at price: " << bids[0].
+  std::cout << "Best bid at price: " << bids[0]->price
+            << " w/ quantity: " << bids[0]->num_orders << "\n";
+}
+
+void Orderbook::get_best_ask() {
+  auto &asks = levels_.get_asks();
+  if (!asks.size()) {
+    std::cout << "No active asks" << "\n";
+    return;
+  }
+  std::cout << "Best ask at price: " << asks[0]->price
+            << " w/ quantity: " << asks[0]->num_orders << "\n";
 }
