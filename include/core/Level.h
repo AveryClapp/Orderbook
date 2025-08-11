@@ -2,16 +2,13 @@
 
 #include "include/core/Order.h"
 #include "include/core/Using.h"
-#include <map>
-#include <vector>
+#include <boost/container/flat_map.hpp>
+#include <queue>
 
-// TODO: Struct alignment, optimize padding here
 struct Level {
   Price price;
-  size_t num_orders;
-
-  Order *tail;
-  Order *head;
+  std::queue<Order *> orders;
 };
 
-using Levels = std::vector<Level *>;
+template <typename Compare>
+using Levels = boost::container::flat_map<Price, Level, Compare>;

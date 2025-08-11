@@ -46,7 +46,7 @@ void Orderbook::print_book() {
       Level *ask_level = asks[ask_idx];
       Quantity total_qty = 10;
       std::cout << std::setw(8) << ask_level->price << std::setw(8) << total_qty
-                << std::setw(8) << ask_level->num_orders;
+                << std::setw(8) << ask_level->orders.size();
     } else {
       std::cout << std::setw(24) << "";
     }
@@ -54,40 +54,28 @@ void Orderbook::print_book() {
 }
 
 void Orderbook::handle_sell(Order *sell_order) {
+  // Get the current bids
   auto &bids = levels_.get_bids();
-  for (Level *l : bids) {
-    if (l->price < sell_order->price) {
+
+  for (auto &[price, level] : bids) {
+    if (price < sell_order->price) {
       break;
     }
-    if (l->num_orders == 0) {
-      continue;
-    }
-    Order *cur = l->head;
-    while (cur) {
+    unsigned short orders_filled = 0;
+    for (auto &order : level.orders) {
       Quantity consumed =
-          std::min(cur->remaining_quantity, sell_order->remaining_quantity);
+          std::min(order->remaining_quantity, sell_order->remaining_quantity);
+      order->remaining_quantuty -= consumed;
       sell_order->remaining_quantity -= consumed;
-      cur->remaining_quantity -= consumed;
-      if (cur->remaining_quantity == 0) {
-        Order *remove = cur;
-        if (remove->prev_order) {
-          remove->prev_order->next_order = remove->next_order;
-        } else {
-          l->head = remove->next_order;
-        }
-        if (remove->next_order) {
-          remove->next_order->prev_order = remove->prev_order;
-        }
-        cur = remove->next_order;
-        delete remove;
-        l->num_orders--;
+      if (order->remaining_quantity == 0) {
+        orders_filled++;
       }
       if (sell_order->remaining_quantity == 0) {
         break;
       }
     }
-    if (sell_order->remaining_quantity == 0) {
-      break;
+    for (unsigned j = 0; j < orders_filled; j++) {
+      level.orders.pop_front();
     }
   }
   if (sell_order->remaining_quantity > 0) {
@@ -97,40 +85,30 @@ void Orderbook::handle_sell(Order *sell_order) {
 
 void Orderbook::handle_buy(Order *buy_order) {
   auto &asks = levels_.get_asks();
-  for (Level *l : asks) {
-    if (l->price > buy_order->price) {
+
+  for (auto &[price, level] : asks) {
+    if (price < buy_order->price) {
       break;
     }
-    if (l->num_orders == 0) {
-      continue;
-    }
-    Order *cur = l->head;
-    while (cur) {
+    unsigned short orders_filled = 0;
+    for (auto &order : level.orders) {
       Quantity consumed =
-          std::min(cur->remaining_quantity, buy_order->remaining_quantity);
+          std::min(order->remaining_quantity, sell_order->remaining_quantity);
+      order->remaining_quantuty -= consumed;
       buy_order->remaining_quantity -= consumed;
-      cur->remaining_quantity -= consumed;
-      if (cur->remaining_quantity == 0) {
-        Order *remove = cur;
-        if (remove->prev_order) {
-          remove->prev_order->next_order = remove->next_order;
-        } else {
-          l->head = remove->next_order;
-        }
-        if (remove->next_order) {
-          remove->next_order->prev_order = remove->prev_order;
-        }
-        cur = remove->next_order;
-        delete remove;
-        l->num_orders--;
+      if (order->remaining_quantity == 0) {
+        orders_filled++;
       }
       if (buy_order->remaining_quantity == 0) {
         break;
       }
     }
+    for (unsigned j = 0; j < orders_filled; j++) {
+      level.orders.pop_front();
+    }
   }
   if (buy_order->remaining_quantity > 0) {
-    levels_.add_bid(buy_order);
+    levels_.add_ask(buy_order);
   }
 }
 
@@ -140,17 +118,9 @@ void Orderbook::handle_cancel(const ID cancel_id) {
     throw std::runtime_error("Tried to Cancel nonexistent id");
   }
   assert(order->id == cancel_id);
-  Order *remove = order;
-  if (remove->prev_order) {
-    remove->prev_order->next_order = remove->next_order;
-  } else {
-    remove->cur_level->head = remove->next_order;
-  }
-  if (remove->next_order) {
-    remove->next_order->prev_order = remove->prev_order;
-  }
-  remove->cur_level->num_orders--;
-  delete remove;
+  auto &orders = order->cur_level->orders;
+  orders.erase(orders.begion() + order->level_position);
+  delete order;
 }
 
 void Orderbook::get_best_bid() {
@@ -159,16 +129,18 @@ void Orderbook::get_best_bid() {
     std::cout << "No active bids" << "\n";
     return;
   }
-  std::cout << "Best bid at price: " << bids[0]->price
-            << " w/ quantity: " << bids[0]->num_orders << "\n";
+  const auto &smallestElement = *bids.begin();
+  std::cout << "Best bid at price: " << smallestElement.price
+            << " w/ quantity: " << smallestElement.num_orders << "\n";
 }
 
 void Orderbook::get_best_ask() {
   auto &asks = levels_.get_asks();
   if (!asks.size()) {
-    std::cout << "No active asks" << "\n";
+    std::cout << "No active bids" << "\n";
     return;
   }
-  std::cout << "Best ask at price: " << asks[0]->price
-            << " w/ quantity: " << asks[0]->num_orders << "\n";
+  const auto &smallestElement = *asks.begin();
+  std::cout << "Best bid at price: " << smallestElement.price
+            << " w/ quantity: " << smallestElement.num_orders << "\n";
 }

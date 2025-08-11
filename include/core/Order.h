@@ -16,7 +16,6 @@ struct Order {
   Quantity remaining_quantity;
   Time time_;
   Level *cur_level;
-  Order *next_order;
-  Order *prev_order;
   ID id;
+  int level_position;
 };
