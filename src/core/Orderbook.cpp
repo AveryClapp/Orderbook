@@ -118,8 +118,16 @@ void Orderbook::handle_cancel(const ID cancel_id) {
     throw std::runtime_error("Tried to Cancel nonexistent id");
   }
   assert(order->id == cancel_id);
-  auto &orders = order->cur_level->orders;
-  orders.erase(orders.begion() + order->level_position);
+
+  Level &target_level = NULL;
+  if (order->direction == Direction::Buy) {
+    target_level = levels_.get_bids()[order->price];
+  } else {
+    target_level = levels_.get_asks()[order->price];
+  }
+  target_level.cancel_order(order->level_position);
+
+  order_map_.erase(cancel_id);
   delete order;
 }
 
