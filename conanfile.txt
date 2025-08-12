@@ -1,3 +1,6 @@
+[requires]
+boost/1.88.0
+
 [generators]
 CMakeDeps
 CMakeToolchain

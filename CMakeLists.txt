@@ -6,15 +6,19 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -Wall -Wextra")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
+find_package(boost REQUIRED)
 
 add_executable(myapp 
     src/main.cpp 
     src/core/Orderbook.cpp
     src/core/OrderbookLevels.cpp
 )
+
+target_link_libraries(myapp boost::boost)
 
 set(HEADERS
     include/core/Direction.h
