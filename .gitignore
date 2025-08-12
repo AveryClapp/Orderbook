@@ -2,8 +2,8 @@
 *.d
 
 */build/
-*/.cache
-*/.idea
+*/.cache/
+*/.idea/
 
 # Compiled Object files
 *.slo

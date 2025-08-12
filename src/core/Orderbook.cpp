@@ -93,7 +93,7 @@ void Orderbook::handle_buy(Order *buy_order) {
     unsigned short orders_filled = 0;
     for (auto &order : level.orders) {
       Quantity consumed =
-          std::min(order->remaining_quantity, sell_order->remaining_quantity);
+          std::min(order->remaining_quantity, buy_order->remaining_quantity);
       order->remaining_quantuty -= consumed;
       buy_order->remaining_quantity -= consumed;
       if (order->remaining_quantity == 0) {
@@ -118,13 +118,9 @@ void Orderbook::handle_cancel(const ID cancel_id) {
     throw std::runtime_error("Tried to Cancel nonexistent id");
   }
   assert(order->id == cancel_id);
-
-  Level &target_level = NULL;
-  if (order->direction == Direction::Buy) {
-    target_level = levels_.get_bids()[order->price];
-  } else {
-    target_level = levels_.get_asks()[order->price];
-  }
+  Level &target_level = (order->direction == Direction::Buy)
+                            ? levels_.get_bids()[order->price]
+                            : levels_.get_asks()[order->price];
   target_level.cancel_order(order->level_position);
 
   order_map_.erase(cancel_id);
@@ -139,7 +135,7 @@ void Orderbook::get_best_bid() {
   }
   const auto &smallestElement = *bids.begin();
   std::cout << "Best bid at price: " << smallestElement.price
-            << " w/ quantity: " << smallestElement.num_orders << "\n";
+            << " w/ quantity: " << smallestElement.orders.size() << "\n";
 }
 
 void Orderbook::get_best_ask() {
@@ -150,5 +146,5 @@ void Orderbook::get_best_ask() {
   }
   const auto &smallestElement = *asks.begin();
   std::cout << "Best bid at price: " << smallestElement.price
-            << " w/ quantity: " << smallestElement.num_orders << "\n";
+            << " w/ quantity: " << smallestElement.orders.size() << "\n";
 }

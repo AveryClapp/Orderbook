@@ -2,9 +2,6 @@
 
 #include "include/core/Level.h"
 #include "include/core/Order.h"
-#include "include/core/Using.h"
-#include <stdexcept>
-#include <unordered_map>
 
 class OrderbookLevels {
 private:
