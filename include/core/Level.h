@@ -7,6 +7,7 @@
 
 struct Level {
   Price price;
+  Quantity total_quantity;
   std::deque<Order *> orders;
 
   void cancel_order(size_t position) {

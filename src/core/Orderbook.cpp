@@ -4,7 +4,7 @@
 #include <ctime>
 #include <iomanip>
 #include <iostream>
-#include <sstream>
+
 /**
  * Upon receiving an order, send it to a function that handles its direction.
  */
@@ -14,6 +14,9 @@ void Orderbook::receive_message(Message msg) {
     handle_cancel(cancel.cancel_id);
   } else if (std::holds_alternative<Order *>(msg.data)) {
     Order *order = std::get<Order *>(msg.data);
+    if (order->type == OrderType::FillOrKill && !can_fill(*order)) {
+      return; // Can't fill, exit here.
+    }
     if (order->direction == Direction::Buy) {
       handle_buy(order);
     } else {
@@ -24,6 +27,7 @@ void Orderbook::receive_message(Message msg) {
   }
 }
 
+// TODO: Fix
 void Orderbook::print_book() {
   std::cout << "\n================== ORDER BOOK ==================\n";
   std::cout << std::setw(15) << "ASKS (SELL)" << std::setw(20) << ""
@@ -68,6 +72,7 @@ void Orderbook::handle_sell(Order *sell_order) {
           std::min(order->remaining_quantity, sell_order->remaining_quantity);
       order->remaining_quantity -= consumed;
       sell_order->remaining_quantity -= consumed;
+      level.total_quantity -= consumed;
       if (order->remaining_quantity == 0) {
         order_it = level.orders.erase(order_it);
         order_map_.erase(sell_order->id);
@@ -103,6 +108,7 @@ void Orderbook::handle_buy(Order *buy_order) {
           std::min(order->remaining_quantity, buy_order->remaining_quantity);
       order->remaining_quantity -= consumed;
       buy_order->remaining_quantity -= consumed;
+      level.total_quantity -= consumed;
       if (order->remaining_quantity == 0) {
         order_it = level.orders.erase(order_it);
         order_map_.erase(buy_order->id);
@@ -153,4 +159,26 @@ std::optional<std::pair<Price, size_t>> Orderbook::get_best_ask() {
   }
   const auto &best = *asks.begin();
   return std::make_pair(best.first, best.second.orders.size());
+}
+
+bool Orderbook::can_fill(const Order &order) {
+  Quantity matched_quantity = 0;
+  if (order.direction == Direction::Sell) {
+    auto &bids = levels_.get_bids();
+    for (const auto &[price, level] : bids) {
+      if (price < order.price || matched_quantity > order.initial_quantity) {
+        break;
+      }
+      matched_quantity += level.total_quantity;
+    }
+  } else {
+    auto &asks = levels_.get_asks();
+    for (const auto &[price, level] : asks) {
+      if (price > order.price || matched_quantity > order.initial_quantity) {
+        break;
+      }
+      matched_quantity += level.total_quantity;
+    }
+  }
+  return matched_quantity >= order.initial_quantity;
 }

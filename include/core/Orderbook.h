@@ -15,6 +15,8 @@ private:
   void handle_sell(Order *order);
   void handle_cancel(const ID cancel_id);
 
+  bool can_fill(const Order &order);
+
 public:
   Orderbook() = default;
 

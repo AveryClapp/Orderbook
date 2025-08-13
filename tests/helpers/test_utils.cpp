@@ -1,7 +1,18 @@
 #include "tests/helpers/test_utils.h"
 
-Order *test_utils::create_order(ID id, Price price, Quantity qty,
-                                Direction dir) {
+Order *test_utils::create_order(ID id, Price price, Quantity qty, Direction dir,
+                                OrderType type = OrderType::GoodTilCancel) {
+  return new Order{.price = price,
+                   .type = OrderType::GoodTilCancel,
+                   .direction = dir,
+                   .initial_quantity = qty,
+                   .remaining_quantity = qty,
+                   .time_ = std::chrono::system_clock::now(),
+                   .cur_level = nullptr,
+                   .id = id};
+}
+
+Order *test_utils::(ID id, Price price, Quantity qty, Direction dir) {
   return new Order{.price = price,
                    .type = OrderType::GoodTilCancel,
                    .direction = dir,
