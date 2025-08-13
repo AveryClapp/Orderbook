@@ -1,14 +1,9 @@
 #pragma once
 
-#include "include/core/Level.h"
 #include "include/core/Message.h"
 #include "include/core/Order.h"
 #include "include/core/OrderbookLevels.h"
 #include "include/core/Using.h"
-#include <algorithm>
-#include <exception>
-#include <iostream>
-#include <vector>
 
 class Orderbook {
 private:
@@ -27,6 +22,6 @@ public:
 
   void print_book();
 
-  void get_best_bid();
-  void get_best_ask();
+  std::optional<std::pair<Price, size_t>> get_best_bid();
+  std::optional<std::pair<Price, size_t>> get_best_ask();
 };

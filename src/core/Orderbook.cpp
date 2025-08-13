@@ -118,7 +118,7 @@ void Orderbook::handle_buy(Order *buy_order) {
     }
   }
   if (buy_order->remaining_quantity > 0) {
-    levels_.add_ask(buy_order);
+    levels_.add_bid(buy_order);
   }
 }
 
@@ -137,24 +137,20 @@ void Orderbook::handle_cancel(const ID cancel_id) {
   delete order;
 }
 
-void Orderbook::get_best_bid() {
+std::optional<std::pair<Price, size_t>> Orderbook::get_best_bid() {
   auto &bids = levels_.get_bids();
   if (!bids.size()) {
-    std::cout << "No active bids" << "\n";
-    return;
+    return std::nullopt;
   }
-  const auto &smallestElement = *bids.begin();
-  std::cout << "Best bid at price: " << smallestElement.first
-            << " w/ quantity: " << smallestElement.second.orders.size() << "\n";
+  const auto &best = *bids.begin();
+  return std::make_pair(best.first, best.second.orders.size());
 }
 
-void Orderbook::get_best_ask() {
+std::optional<std::pair<Price, size_t>> Orderbook::get_best_ask() {
   auto &asks = levels_.get_asks();
   if (!asks.size()) {
-    std::cout << "No active bids" << "\n";
-    return;
+    return std::nullopt;
   }
-  const auto &smallestElement = *asks.begin();
-  std::cout << "Best bid at price: " << smallestElement.first
-            << " w/ quantity: " << smallestElement.second.orders.size() << "\n";
+  const auto &best = *asks.begin();
+  return std::make_pair(best.first, best.second.orders.size());
 }
