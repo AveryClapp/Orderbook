@@ -142,6 +142,9 @@ std::optional<std::pair<Price, size_t>> Orderbook::get_best_bid() {
   if (!bids.size()) {
     return std::nullopt;
   }
+  for (auto &[price, level] : bids) {
+    std::cout << price << "\n";
+  }
   const auto &best = *bids.begin();
   return std::make_pair(best.first, best.second.orders.size());
 }
@@ -152,5 +155,8 @@ std::optional<std::pair<Price, size_t>> Orderbook::get_best_ask() {
     return std::nullopt;
   }
   const auto &best = *asks.begin();
+  for (auto &[price, level] : asks) {
+    std::cout << price << "\n";
+  }
   return std::make_pair(best.first, best.second.orders.size());
 }

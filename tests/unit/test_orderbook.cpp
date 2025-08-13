@@ -14,9 +14,11 @@ TEST_F(OrderbookCoreTest, TestAddSingleBuyOrder) {
       test_utils::create_order_message(1, 100, 50, Direction::Buy);
 
   orderbook->receive_message(buy_msg);
+  auto result = orderbook->get_best_bid();
+  ASSERT_TRUE(result.has_value());
+  EXPECT_EQ((std::pair{100, 1}), result.value());
 
-  orderbook->get_best_bid();
-  orderbook->get_best_ask();
+  ASSERT_FALSE(orderbook->get_best_ask().has_value());
 }
 
 TEST_F(OrderbookCoreTest, TestAddSingleSellOrder) {
@@ -25,8 +27,11 @@ TEST_F(OrderbookCoreTest, TestAddSingleSellOrder) {
 
   orderbook->receive_message(sell_msg);
 
-  orderbook->get_best_ask();
-  orderbook->get_best_bid();
+  auto ask_result = orderbook->get_best_ask();
+  ASSERT_TRUE(ask_result.has_value());
+  EXPECT_EQ((std::pair{105, 1}), ask_result.value());
+
+  ASSERT_FALSE(orderbook->get_best_bid().has_value());
 }
 
 TEST_F(OrderbookCoreTest, TestMultipleBuyOrdersSamePrice) {
@@ -36,7 +41,9 @@ TEST_F(OrderbookCoreTest, TestMultipleBuyOrdersSamePrice) {
   orderbook->receive_message(buy1);
   orderbook->receive_message(buy2);
 
-  orderbook->get_best_bid();
+  auto bid_result = orderbook->get_best_bid();
+  ASSERT_TRUE(bid_result.has_value());
+  EXPECT_EQ((std::pair{100, 2}), bid_result.value());
 }
 
 TEST_F(OrderbookCoreTest, TestMultipleBuyOrdersDifferentPrices) {
@@ -47,7 +54,9 @@ TEST_F(OrderbookCoreTest, TestMultipleBuyOrdersDifferentPrices) {
   orderbook->receive_message(buy_high);
   orderbook->receive_message(buy_low);
 
-  EXPECT_EQ(orderbook->get_best_bid(), 98)
+  auto bid_result = orderbook->get_best_bid();
+  ASSERT_TRUE(bid_result.has_value());
+  EXPECT_EQ((std::pair{102, 1}), bid_result.value());
 }
 
 TEST_F(OrderbookCoreTest, TestMultipleSellOrdersDifferentPrices) {
@@ -59,7 +68,9 @@ TEST_F(OrderbookCoreTest, TestMultipleSellOrdersDifferentPrices) {
   orderbook->receive_message(sell_low);
   orderbook->receive_message(sell_high);
 
-  orderbook->get_best_ask();
+  auto ask_result = orderbook->get_best_ask();
+  ASSERT_TRUE(ask_result.has_value());
+  EXPECT_EQ((std::pair{105, 1}), ask_result.value());
 }
 
 TEST_F(OrderbookCoreTest, TestExactMatch) {
@@ -71,8 +82,8 @@ TEST_F(OrderbookCoreTest, TestExactMatch) {
       test_utils::create_order_message(2, 100, 50, Direction::Buy);
   orderbook->receive_message(buy_msg);
 
-  orderbook->get_best_bid();
-  orderbook->get_best_ask();
+  ASSERT_FALSE(orderbook->get_best_bid().has_value());
+  ASSERT_FALSE(orderbook->get_best_ask().has_value());
 }
 
 TEST_F(OrderbookCoreTest, TestPartialFillBuyAggressive) {
@@ -84,8 +95,11 @@ TEST_F(OrderbookCoreTest, TestPartialFillBuyAggressive) {
       test_utils::create_order_message(2, 100, 30, Direction::Buy);
   orderbook->receive_message(buy_msg);
 
-  orderbook->get_best_ask();
-  orderbook->get_best_bid();
+  auto ask_result = orderbook->get_best_ask();
+  ASSERT_TRUE(ask_result.has_value());
+  EXPECT_EQ((std::pair{100, 1}), ask_result.value());
+
+  ASSERT_FALSE(orderbook->get_best_bid().has_value());
 }
 
 TEST_F(OrderbookCoreTest, TestPartialFillSellAggressive) {
@@ -97,8 +111,11 @@ TEST_F(OrderbookCoreTest, TestPartialFillSellAggressive) {
       test_utils::create_order_message(2, 100, 40, Direction::Sell);
   orderbook->receive_message(sell_msg);
 
-  orderbook->get_best_bid();
-  orderbook->get_best_ask();
+  auto bid_result = orderbook->get_best_bid();
+  ASSERT_TRUE(bid_result.has_value());
+  EXPECT_EQ((std::pair{100, 1}), bid_result.value());
+
+  ASSERT_FALSE(orderbook->get_best_ask().has_value());
 }
 
 TEST_F(OrderbookCoreTest, TestMultipleLevelConsumption) {
@@ -110,12 +127,11 @@ TEST_F(OrderbookCoreTest, TestMultipleLevelConsumption) {
   orderbook->receive_message(sell2);
   orderbook->receive_message(sell3);
 
-  Message big_buy =
-      test_utils::create_order_message(4, 102, 60, Direction::Buy);
-  orderbook->receive_message(big_buy);
+  auto ask_result = orderbook->get_best_ask();
+  ASSERT_TRUE(ask_result.has_value());
+  EXPECT_EQ((std::pair{100, 1}), ask_result.value());
 
-  orderbook->get_best_ask();
-  orderbook->get_best_bid();
+  ASSERT_EQ(std::nullopt, orderbook->get_best_bid());
 }
 
 TEST_F(OrderbookCoreTest, TestPriceImprovement) {
@@ -127,6 +143,11 @@ TEST_F(OrderbookCoreTest, TestPriceImprovement) {
       test_utils::create_order_message(2, 110, 25, Direction::Buy);
   orderbook->receive_message(buy_msg);
 
-  orderbook->get_best_ask();
-  orderbook->get_best_bid();
+  auto ask_result = orderbook->get_best_ask();
+  ASSERT_TRUE(ask_result.has_value());
+  EXPECT_EQ((std::pair{105, 1}), ask_result.value());
+
+  // Bid quantity should be completely matched, no leftover bid
+  EXPECT_EQ(std::nullopt, orderbook->get_best_bid());
+  orderbook->print_book();
 }
