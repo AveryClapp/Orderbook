@@ -149,5 +149,34 @@ TEST_F(OrderbookCoreTest, TestPriceImprovement) {
 
   // Bid quantity should be completely matched, no leftover bid
   EXPECT_EQ(std::nullopt, orderbook->get_best_bid());
-  orderbook->print_book();
+}
+
+TEST_F(OrderbookCoreTest, TestFillOrKillInvalid) {
+  Message sell_msg =
+      test_utils::create_order_message(1, 105, 50, Direction::Sell);
+  orderbook->receive_message(sell_msg);
+
+  Message buy_msg = test_utils::create_order_message(2, 110, 51, Direction::Buy,
+                                                     OrderType::FillOrKill);
+  orderbook->receive_message(buy_msg);
+
+  auto ask_result = orderbook->get_best_ask();
+  ASSERT_TRUE(ask_result.has_value());
+  EXPECT_EQ((std::pair{105, 1}), ask_result.value());
+
+  // Bid quantity should be completely matched, no leftover bid
+  EXPECT_EQ(std::nullopt, orderbook->get_best_bid());
+}
+
+TEST_F(OrderbookCoreTest, TestFillOrKillValid) {
+  Message sell_msg =
+      test_utils::create_order_message(1, 105, 50, Direction::Sell);
+  orderbook->receive_message(sell_msg);
+
+  Message buy_msg = test_utils::create_order_message(2, 110, 50, Direction::Buy,
+                                                     OrderType::FillOrKill);
+  orderbook->receive_message(buy_msg);
+
+  EXPECT_EQ(std::nullopt, orderbook->get_best_ask());
+  EXPECT_EQ(std::nullopt, orderbook->get_best_bid());
 }

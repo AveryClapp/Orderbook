@@ -1,20 +1,9 @@
 #include "tests/helpers/test_utils.h"
 
 Order *test_utils::create_order(ID id, Price price, Quantity qty, Direction dir,
-                                OrderType type = OrderType::GoodTilCancel) {
+                                OrderType type) {
   return new Order{.price = price,
-                   .type = OrderType::GoodTilCancel,
-                   .direction = dir,
-                   .initial_quantity = qty,
-                   .remaining_quantity = qty,
-                   .time_ = std::chrono::system_clock::now(),
-                   .cur_level = nullptr,
-                   .id = id};
-}
-
-Order *test_utils::(ID id, Price price, Quantity qty, Direction dir) {
-  return new Order{.price = price,
-                   .type = OrderType::GoodTilCancel,
+                   .type = type,
                    .direction = dir,
                    .initial_quantity = qty,
                    .remaining_quantity = qty,
@@ -24,8 +13,8 @@ Order *test_utils::(ID id, Price price, Quantity qty, Direction dir) {
 }
 
 Message test_utils::create_order_message(ID id, Price price, Quantity qty,
-                                         Direction dir) {
-  return Message{create_order(id, price, qty, dir)};
+                                         Direction dir, OrderType type) {
+  return Message{create_order(id, price, qty, dir, type)};
 }
 Message test_utils::create_cancel_message(ID id) { return Message{Cancel{id}}; }
 
