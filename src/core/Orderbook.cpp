@@ -2,8 +2,6 @@
 #include <algorithm>
 #include <cassert>
 #include <ctime>
-#include <iomanip>
-#include <iostream>
 
 /**
  * Upon receiving an order, send it to a function that handles its direction.
@@ -27,36 +25,8 @@ void Orderbook::receive_message(Message msg) {
   }
 }
 
-// TODO: Fix
-void Orderbook::print_book() {
-  std::cout << "\n================== ORDER BOOK ==================\n";
-  std::cout << std::setw(15) << "ASKS (SELL)" << std::setw(20) << ""
-            << std::setw(15) << "BIDS (BUY)" << "\n";
-  std::cout << std::setw(8) << "Price" << std::setw(8) << "Qty" << std::setw(8)
-            << "Orders" << std::setw(8) << "|" << std::setw(8) << "Price"
-            << std::setw(8) << "Qty" << std::setw(8) << "Orders" << "\n";
-  std::cout << "------------------------------------------------\n";
-
-  auto &asks = levels_.get_asks();
-  auto &bids = levels_.get_bids();
-
-  size_t max_levels = std::max(asks.size(), bids.size());
-  size_t display_levels = std::min(max_levels, static_cast<size_t>(10));
-
-  for (size_t i = 0; i < display_levels; ++i) {
-    size_t ask_idx = asks.size() > i ? asks.size() - 1 - i : SIZE_MAX;
-    if (ask_idx != SIZE_MAX && ask_idx < asks.size()) {
-      Level ask_level = asks[ask_idx];
-      Quantity total_qty = 10;
-      std::cout << std::setw(8) << ask_level.price << std::setw(8) << total_qty
-                << std::setw(8) << ask_level.orders.size();
-    } else {
-      std::cout << std::setw(24) << "";
-    }
-  }
-}
-
 void Orderbook::handle_sell(Order *sell_order) {
+  auto now = std::chrono::system_clock::now();
   auto &bids = levels_.get_bids();
   auto it = bids.begin();
   while (it != bids.end() && sell_order->remaining_quantity > 0) {
@@ -68,6 +38,12 @@ void Orderbook::handle_sell(Order *sell_order) {
     auto order_it = level.orders.begin();
     while (order_it != level.orders.end()) {
       auto *order = *order_it;
+      if (order->time - now >= std::chrono::hours(24) &&
+          order->type == OrderType::GoodForDay) {
+        order_it = level.orders.erase(order_it);
+        delete order;
+        continue;
+      }
       Quantity consumed =
           std::min(order->remaining_quantity, sell_order->remaining_quantity);
       order->remaining_quantity -= consumed;
@@ -75,8 +51,8 @@ void Orderbook::handle_sell(Order *sell_order) {
       level.total_quantity -= consumed;
       if (order->remaining_quantity == 0) {
         order_it = level.orders.erase(order_it);
-        order_map_.erase(sell_order->id);
-        delete sell_order;
+        order_map_.erase(order->id);
+        delete order;
       } else {
         ++order_it;
       }
@@ -89,10 +65,13 @@ void Orderbook::handle_sell(Order *sell_order) {
   }
   if (sell_order->remaining_quantity > 0) {
     levels_.add_ask(sell_order);
+  } else {
+    delete sell_order;
   }
 }
 
 void Orderbook::handle_buy(Order *buy_order) {
+  auto now = std::chrono::system_clock::now();
   auto &asks = levels_.get_asks();
   auto it = asks.begin();
   while (it != asks.end() && buy_order->remaining_quantity > 0) {
@@ -104,6 +83,12 @@ void Orderbook::handle_buy(Order *buy_order) {
     auto order_it = level.orders.begin();
     while (order_it != level.orders.end()) {
       auto *order = *order_it;
+      if (order->time - now >= std::chrono::hours(24) &&
+          order->type == OrderType::GoodForDay) {
+        order_it = level.orders.erase(order_it);
+        delete order;
+        continue;
+      }
       Quantity consumed =
           std::min(order->remaining_quantity, buy_order->remaining_quantity);
       order->remaining_quantity -= consumed;
@@ -111,8 +96,8 @@ void Orderbook::handle_buy(Order *buy_order) {
       level.total_quantity -= consumed;
       if (order->remaining_quantity == 0) {
         order_it = level.orders.erase(order_it);
-        order_map_.erase(buy_order->id);
-        delete buy_order;
+        order_map_.erase(order->id);
+        delete order;
       } else {
         ++order_it;
       }
@@ -125,6 +110,8 @@ void Orderbook::handle_buy(Order *buy_order) {
   }
   if (buy_order->remaining_quantity > 0) {
     levels_.add_bid(buy_order);
+  } else {
+    delete buy_order;
   }
 }
 
