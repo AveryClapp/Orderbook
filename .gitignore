@@ -1,9 +1,9 @@
 # Prerequisites
 *.d
 
-*/build/
-*/.cache/
-*/.idea/
+build/
+.cache/
+.idea/
 
 # Compiled Object files
 *.slo
