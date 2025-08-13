@@ -92,7 +92,7 @@ void Orderbook::handle_buy(Order *buy_order) {
   auto it = asks.begin();
   while (it != asks.end() && buy_order->remaining_quantity > 0) {
     auto &[price, level] = *it;
-    if (price < buy_order->price) {
+    if (price > buy_order->price) {
       break;
     }
     unsigned short orders_filled = 0;
@@ -142,9 +142,6 @@ std::optional<std::pair<Price, size_t>> Orderbook::get_best_bid() {
   if (!bids.size()) {
     return std::nullopt;
   }
-  for (auto &[price, level] : bids) {
-    std::cout << price << "\n";
-  }
   const auto &best = *bids.begin();
   return std::make_pair(best.first, best.second.orders.size());
 }
@@ -155,8 +152,5 @@ std::optional<std::pair<Price, size_t>> Orderbook::get_best_ask() {
     return std::nullopt;
   }
   const auto &best = *asks.begin();
-  for (auto &[price, level] : asks) {
-    std::cout << price << "\n";
-  }
   return std::make_pair(best.first, best.second.orders.size());
 }
