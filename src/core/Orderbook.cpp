@@ -33,20 +33,19 @@ void Orderbook::print_book() {
             << std::setw(8) << "Qty" << std::setw(8) << "Orders" << "\n";
   std::cout << "------------------------------------------------\n";
 
-  const auto &asks = levels_.get_asks();
-  const auto &bids = levels_.get_bids();
+  auto &asks = levels_.get_asks();
+  auto &bids = levels_.get_bids();
 
   size_t max_levels = std::max(asks.size(), bids.size());
-  size_t display_levels =
-      std::min(max_levels, static_cast<size_t>(10)); // Show top 10 levels
+  size_t display_levels = std::min(max_levels, static_cast<size_t>(10));
 
   for (size_t i = 0; i < display_levels; ++i) {
     size_t ask_idx = asks.size() > i ? asks.size() - 1 - i : SIZE_MAX;
     if (ask_idx != SIZE_MAX && ask_idx < asks.size()) {
-      Level *ask_level = asks[ask_idx];
+      Level ask_level = asks[ask_idx];
       Quantity total_qty = 10;
-      std::cout << std::setw(8) << ask_level->price << std::setw(8) << total_qty
-                << std::setw(8) << ask_level->orders.size();
+      std::cout << std::setw(8) << ask_level.price << std::setw(8) << total_qty
+                << std::setw(8) << ask_level.orders.size();
     } else {
       std::cout << std::setw(24) << "";
     }
@@ -54,28 +53,33 @@ void Orderbook::print_book() {
 }
 
 void Orderbook::handle_sell(Order *sell_order) {
-  // Get the current bids
   auto &bids = levels_.get_bids();
-
-  for (auto &[price, level] : bids) {
+  auto it = bids.begin();
+  while (it != bids.end() && sell_order->remaining_quantity > 0) {
+    auto &[price, level] = *it;
     if (price < sell_order->price) {
       break;
     }
     unsigned short orders_filled = 0;
-    for (auto &order : level.orders) {
+    auto order_it = level.orders.begin();
+    while (order_it != level.orders.end()) {
+      auto *order = *order_it;
       Quantity consumed =
           std::min(order->remaining_quantity, sell_order->remaining_quantity);
-      order->remaining_quantuty -= consumed;
+      order->remaining_quantity -= consumed;
       sell_order->remaining_quantity -= consumed;
       if (order->remaining_quantity == 0) {
-        orders_filled++;
-      }
-      if (sell_order->remaining_quantity == 0) {
-        break;
+        order_it = level.orders.erase(order_it);
+        order_map_.erase(sell_order->id);
+        delete sell_order;
+      } else {
+        ++order_it;
       }
     }
-    for (unsigned j = 0; j < orders_filled; j++) {
-      level.orders.pop_front();
+    if (level.orders.empty()) {
+      it = bids.erase(it);
+    } else {
+      ++it;
     }
   }
   if (sell_order->remaining_quantity > 0) {
@@ -85,26 +89,32 @@ void Orderbook::handle_sell(Order *sell_order) {
 
 void Orderbook::handle_buy(Order *buy_order) {
   auto &asks = levels_.get_asks();
-
-  for (auto &[price, level] : asks) {
+  auto it = asks.begin();
+  while (it != asks.end() && buy_order->remaining_quantity > 0) {
+    auto &[price, level] = *it;
     if (price < buy_order->price) {
       break;
     }
     unsigned short orders_filled = 0;
-    for (auto &order : level.orders) {
+    auto order_it = level.orders.begin();
+    while (order_it != level.orders.end()) {
+      auto *order = *order_it;
       Quantity consumed =
           std::min(order->remaining_quantity, buy_order->remaining_quantity);
-      order->remaining_quantuty -= consumed;
+      order->remaining_quantity -= consumed;
       buy_order->remaining_quantity -= consumed;
       if (order->remaining_quantity == 0) {
-        orders_filled++;
-      }
-      if (buy_order->remaining_quantity == 0) {
-        break;
+        order_it = level.orders.erase(order_it);
+        order_map_.erase(buy_order->id);
+        delete buy_order;
+      } else {
+        ++order_it;
       }
     }
-    for (unsigned j = 0; j < orders_filled; j++) {
-      level.orders.pop_front();
+    if (level.orders.empty()) {
+      it = asks.erase(it);
+    } else {
+      ++it;
     }
   }
   if (buy_order->remaining_quantity > 0) {
@@ -134,8 +144,8 @@ void Orderbook::get_best_bid() {
     return;
   }
   const auto &smallestElement = *bids.begin();
-  std::cout << "Best bid at price: " << smallestElement.price
-            << " w/ quantity: " << smallestElement.orders.size() << "\n";
+  std::cout << "Best bid at price: " << smallestElement.first
+            << " w/ quantity: " << smallestElement.second.orders.size() << "\n";
 }
 
 void Orderbook::get_best_ask() {
@@ -145,6 +155,6 @@ void Orderbook::get_best_ask() {
     return;
   }
   const auto &smallestElement = *asks.begin();
-  std::cout << "Best bid at price: " << smallestElement.price
-            << " w/ quantity: " << smallestElement.orders.size() << "\n";
+  std::cout << "Best bid at price: " << smallestElement.first
+            << " w/ quantity: " << smallestElement.second.orders.size() << "\n";
 }

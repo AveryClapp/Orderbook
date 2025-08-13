@@ -9,8 +9,6 @@ Order *test_utils::create_order(ID id, Price price, Quantity qty,
                    .remaining_quantity = qty,
                    .time_ = std::chrono::system_clock::now(),
                    .cur_level = nullptr,
-                   .next_order = nullptr,
-                   .prev_order = nullptr,
                    .id = id};
 }
 
