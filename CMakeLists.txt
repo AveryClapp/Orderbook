@@ -33,23 +33,20 @@ set(HEADERS
 target_sources(myapp PRIVATE ${HEADERS})
 
 find_package(GTest QUIET)
+find_package(benchmark QUIET)
 
-if(GTest_FOUND)
-    file(GLOB_RECURSE TEST_SOURCES 
-         "tests/unit/*.cpp"
-         "tests/integration/*.cpp"
-         "tests/helpers/*.cpp"
-    )
-    add_executable(tests
-        ${TEST_SOURCES}
-        src/core/Orderbook.cpp
-        src/core/OrderbookLevels.cpp
-    )
+file(GLOB_RECURSE TEST_SOURCES 
+ "tests/unit/*.cpp"
+ "tests/integration/*.cpp"
+ "tests/helpers/*.cpp"
+)
+add_executable(tests
+    ${TEST_SOURCES}
+    src/core/Orderbook.cpp
+    src/core/OrderbookLevels.cpp
+)
 
-    target_link_libraries(tests GTest::gtest_main)
-    target_include_directories(tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(tests GTest::gtest_main)
+target_link_libraries(tests benchmark::benchmark)
+target_include_directories(tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
-    message(STATUS "Tests enabled - run with './tests'")
-else()
-    message(STATUS "GTest not found - tests disabled")
-endif()
