@@ -40,12 +40,32 @@ file(GLOB_RECURSE TEST_SOURCES
  "tests/integration/*.cpp"
  "tests/helpers/*.cpp"
 )
+
 add_executable(tests
     ${TEST_SOURCES}
     src/core/Orderbook.cpp
     src/core/OrderbookLevels.cpp
+    tests/helpers/test_utils.cpp
 )
 
+if(benchmark_FOUND)
+    add_executable(benchmarks
+        benchmarks/benchmarks.cpp
+        src/core/Orderbook.cpp
+        src/core/OrderbookLevels.cpp
+        tests/helpers/test_utils.cpp
+    )
+    
+    target_link_libraries(benchmarks benchmark::benchmark)
+    target_link_libraries(benchmarks boost::boost)
+    target_include_directories(benchmarks PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+    
+    add_custom_target(run_benchmarks
+        COMMAND benchmarks --benchmark_format=console
+        DEPENDS benchmarks
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    )
+endif()
 target_link_libraries(tests GTest::gtest_main)
 target_link_libraries(tests benchmark::benchmark)
 target_include_directories(tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
