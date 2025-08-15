@@ -2,6 +2,15 @@
 *.d
 
 build/
+CMakeFiles/
+cmake-build-debug/
+
+CMakeCache.txt
+CMakeUserPresets.json
+Makefile
+cmake_install.cmake 
+compile_commands.json
+
 .cache/
 .idea/
 
@@ -44,5 +53,3 @@ build/
 
 # debug information files
 *.dwo
-CMakeUserPresets.json
-compile_commands.json
