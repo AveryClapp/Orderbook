@@ -34,7 +34,6 @@ void Orderbook::handle_sell(Order *sell_order) {
     if (price < sell_order->price) {
       break;
     }
-    unsigned short orders_filled = 0;
     auto order_it = level.orders.begin();
     while (order_it != level.orders.end()) {
       auto *order = *order_it;
@@ -79,7 +78,6 @@ void Orderbook::handle_buy(Order *buy_order) {
     if (price > buy_order->price) {
       break;
     }
-    unsigned short orders_filled = 0;
     auto order_it = level.orders.begin();
     while (order_it != level.orders.end()) {
       auto *order = *order_it;

@@ -1,0 +1,1 @@
+/usr/bin/c++  -arch x86_64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/benchmarks.dir/benchmarks/benchmarks.cpp.o CMakeFiles/benchmarks.dir/src/core/Orderbook.cpp.o CMakeFiles/benchmarks.dir/src/core/OrderbookLevels.cpp.o CMakeFiles/benchmarks.dir/tests/helpers/test_utils.cpp.o -o benchmarks  /usr/local/lib/libbenchmark.a -lboost::boost
