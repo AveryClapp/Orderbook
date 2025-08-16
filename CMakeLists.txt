@@ -4,8 +4,22 @@ project(MyProject)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -Wall -Wextra")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
+set(CMAKE_CXX_FLAGS_DEBUG 
+    "-g -O0 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Wnon-virtual-dtor -Wold-style-cast -Wcast-align -Wunused -Woverloaded-virtual"
+)
+set(CMAKE_CXX_FLAGS_RELEASE 
+    "-O3 -DNDEBUG -march=native -mtune=native -flto -ffast-math -funroll-loops -finline-functions -fomit-frame-pointer"
+)
+
+
+
+# Enable based on build type
+if(CMAKE_BUILD_TYPE STREQUAL "AddressSan")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_ASAN}")
+elseif(CMAKE_BUILD_TYPE STREQUAL "ThreadSan")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_TSAN}")
+endif()
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
