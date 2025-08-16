@@ -18,11 +18,11 @@ Some Specs:
 ### Iteration 1: The Starting Point
 
 AddOrdersEmpty: 907 ns  
-AddOrdersPopulated: 1081 ns  
+AddOrdersPopulated: 1054 ns  
 OrderMatching: 809 ns  
-BestBidAsk: 2.77 ns  
-OrderCancellation: 806 ns
+BestBidAsk: 1.19 ns  
+OrderCancellation: 798 ns
 
-Nothing too note here since we don't have much to compare to. Although, it looks like our best bid and ask orders are in L1 cache due to the 2.77 ns response time.
+Nothing too note here since we don't have much to compare to. Although, it looks like our best bid and ask orders are in L1 cache due to the 1.19 ns response time.
 
 ### Iteration 2: Reducing Branching

@@ -37,7 +37,7 @@ void Orderbook::handle_sell(Order *sell_order) {
     auto order_it = level.orders.begin();
     while (order_it != level.orders.end()) {
       auto *order = *order_it;
-      if (order->time - now >= std::chrono::hours(24) &&
+      if (now - order->time >= std::chrono::hours(24) &&
           order->type == OrderType::GoodForDay) {
         order_it = level.orders.erase(order_it);
         delete order;
@@ -82,7 +82,7 @@ void Orderbook::handle_buy(Order *buy_order) {
     auto order_it = level.orders.begin();
     while (order_it != level.orders.end()) {
       auto *order = *order_it;
-      if (order->time - now >= std::chrono::hours(24) &&
+      if (now - order->time >= std::chrono::hours(24) &&
           order->type == OrderType::GoodForDay) {
         order_it = level.orders.erase(order_it);
         delete order;
