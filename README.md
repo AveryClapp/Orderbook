@@ -6,7 +6,7 @@ This order matching engine is designed for high-frequency trading environments w
 
 ## Iterative Benchmarking
 
-With the goal of making this as fast as possible, I figured it would be a good idea to document the journey from making this fast as possible starting from a working version. This starts with no explicit optimizations and then goes through step by step what I refined to improve performance.
+With the goal of making this as fast as possible, I figured it would be a good idea to document the journey from making this fast as possible starting from a working version. This starts with no explicit optimizations and then goes through step by step what I refined to improve performance. For the sake of brevity, I will analyze just the first (smallest) case for each benchmark output.
 
 Some Specs:
 
@@ -15,4 +15,14 @@ Some Specs:
 - L2 Data Cache: 4096 KiB
 - 8 x 2400 MHz CPUs (more on this later)
 
-### Iteration 1
+### Iteration 1: The Starting Point
+
+AddOrdersEmpty: 907 ns  
+AddOrdersPopulated: 1081 ns  
+OrderMatching: 809 ns  
+BestBidAsk: 2.77 ns  
+OrderCancellation: 806 ns
+
+Nothing too note here since we don't have much to compare to. Although, it looks like our best bid and ask orders are in L1 cache due to the 2.77 ns response time.
+
+### Iteration 2: Reducing Branching

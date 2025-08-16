@@ -64,6 +64,7 @@ void Orderbook::handle_sell(Order *sell_order) {
   }
   if (sell_order->remaining_quantity > 0) {
     levels_.add_ask(sell_order);
+    order_map_[sell_order->id] = sell_order;
   } else {
     delete sell_order;
   }
@@ -108,6 +109,7 @@ void Orderbook::handle_buy(Order *buy_order) {
   }
   if (buy_order->remaining_quantity > 0) {
     levels_.add_bid(buy_order);
+    order_map_[buy_order->id] = buy_order;
   } else {
     delete buy_order;
   }
