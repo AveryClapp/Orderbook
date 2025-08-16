@@ -1,6 +1,7 @@
 #include "include/core/Orderbook.h"
 #include "tests/helpers/test_utils.h"
 #include <benchmark/benchmark.h>
+#include <cstdint>
 #include <random>
 #include <vector>
 
@@ -9,7 +10,7 @@ static void BM_AddOrdersEmpty(benchmark::State &state) {
   for (auto _ : state) {
     state.PauseTiming();
     Orderbook orderbook;
-    auto order = test_utils::create_order(1, 100, 50, Direction::Buy);
+    auto order = test_utils::create_order(1UL, 100, 50, Direction::Buy);
     Message msg{order};
     state.ResumeTiming();
 
@@ -22,7 +23,7 @@ BENCHMARK(BM_AddOrdersEmpty);
 
 // Benchmark adding orders to a populated orderbook
 static void BM_AddOrdersPopulated(benchmark::State &state) {
-  const int book_depth = state.range(0);
+  int64_t book_depth = state.range(0);
 
   for (auto _ : state) {
     state.PauseTiming();
@@ -30,16 +31,18 @@ static void BM_AddOrdersPopulated(benchmark::State &state) {
 
     // Pre-populate the orderbook
     for (int i = 0; i < book_depth; ++i) {
-      auto buy_order =
-          test_utils::create_order(i * 2, 100 - i, 50, Direction::Buy);
+      auto buy_order = test_utils::create_order(
+          static_cast<unsigned long>(i) * 2UL, 100 - i, 50, Direction::Buy);
       auto sell_order =
-          test_utils::create_order(i * 2 + 1, 105 + i, 50, Direction::Sell);
+          test_utils::create_order(static_cast<unsigned long>(i) * 2UL + 1,
+                                   105 + i, 50, Direction::Sell);
       orderbook.receive_message(Message{buy_order});
       orderbook.receive_message(Message{sell_order});
     }
 
-    auto new_order =
-        test_utils::create_order(book_depth * 2 + 1, 102, 25, Direction::Buy);
+    auto new_order = test_utils::create_order(
+        static_cast<unsigned long>(book_depth) * 2UL + 1UL, 102, 25,
+        Direction::Buy);
     Message msg{new_order};
     state.ResumeTiming();
 
@@ -57,11 +60,11 @@ static void BM_OrderMatching(benchmark::State &state) {
     Orderbook orderbook;
 
     // Add a sell order
-    auto sell_order = test_utils::create_order(1, 100, 100, Direction::Sell);
+    auto sell_order = test_utils::create_order(1UL, 100, 100, Direction::Sell);
     orderbook.receive_message(Message{sell_order});
 
     // Create matching buy order
-    auto buy_order = test_utils::create_order(2, 100, 50, Direction::Buy);
+    auto buy_order = test_utils::create_order(2UL, 100, 50, Direction::Buy);
     Message msg{buy_order};
     state.ResumeTiming();
 
@@ -79,9 +82,9 @@ static void BM_BestBidAsk(benchmark::State &state) {
   // Pre-populate with some orders
   for (int i = 0; i < 100; ++i) {
     auto buy_order =
-        test_utils::create_order(i * 2, 100 - i, 50, Direction::Buy);
+        test_utils::create_order(i * 2UL, 100 - i, 50, Direction::Buy);
     auto sell_order =
-        test_utils::create_order(i * 2 + 1, 105 + i, 50, Direction::Sell);
+        test_utils::create_order(i * 2UL + 1, 105 + i, 50, Direction::Sell);
     orderbook.receive_message(Message{buy_order});
     orderbook.receive_message(Message{sell_order});
   }
@@ -98,7 +101,7 @@ BENCHMARK(BM_BestBidAsk);
 
 // Benchmark order cancellation
 static void BM_OrderCancellation(benchmark::State &state) {
-  const int order_count = state.range(0);
+  int64_t order_count = state.range(0);
 
   for (auto _ : state) {
     state.PauseTiming();
@@ -107,7 +110,8 @@ static void BM_OrderCancellation(benchmark::State &state) {
 
     // Add orders to cancel
     for (int i = 0; i < order_count; ++i) {
-      auto order = test_utils::create_order(i, 100, 50, Direction::Buy);
+      auto order = test_utils::create_order(static_cast<unsigned long>(i), 100,
+                                            50, Direction::Buy);
       order_ids.push_back(order->id);
       orderbook.receive_message(Message{order});
     }

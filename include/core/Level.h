@@ -3,6 +3,7 @@
 #include "include/core/Order.h"
 #include "include/core/Using.h"
 #include <boost/container/flat_map.hpp>
+#include <cstddef>
 #include <deque>
 
 struct Level {
@@ -15,7 +16,7 @@ struct Level {
       throw std::runtime_error("Invalid position");
     }
 
-    orders.erase(orders.begin() + position);
+    orders.erase(orders.begin() + static_cast<std::ptrdiff_t>(position));
 
     for (size_t i = position; i < orders.size(); i++) {
       orders[i]->level_position = i;

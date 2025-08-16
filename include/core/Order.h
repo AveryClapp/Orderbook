@@ -15,5 +15,5 @@ struct Order {
   Time time;
   Level *cur_level;
   ID id;
-  int level_position;
+  size_t level_position;
 };
