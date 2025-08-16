@@ -81,10 +81,10 @@ static void BM_BestBidAsk(benchmark::State &state) {
 
   // Pre-populate with some orders
   for (int i = 0; i < 100; ++i) {
-    auto buy_order =
-        test_utils::create_order(i * 2UL, 100 - i, 50, Direction::Buy);
-    auto sell_order =
-        test_utils::create_order(i * 2UL + 1, 105 + i, 50, Direction::Sell);
+    auto buy_order = test_utils::create_order(
+        static_cast<unsigned long>(i) * 2UL, 100 - i, 50, Direction::Buy);
+    auto sell_order = test_utils::create_order(
+        static_cast<unsigned long>(i) * 2UL + 1, 105 + i, 50, Direction::Sell);
     orderbook.receive_message(Message{buy_order});
     orderbook.receive_message(Message{sell_order});
   }
@@ -119,8 +119,9 @@ static void BM_OrderCancellation(benchmark::State &state) {
     // Choose a random order to cancel
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dis(0, order_ids.size() - 1);
-    ID cancel_id = order_ids[dis(gen)];
+    std::uniform_int_distribution<unsigned long> dis(0UL,
+                                                     order_ids.size() - 1UL);
+    ID cancel_id = order_ids[static_cast<unsigned long>(dis(gen))];
     Message cancel_msg = test_utils::create_cancel_message(cancel_id);
     state.ResumeTiming();
 
