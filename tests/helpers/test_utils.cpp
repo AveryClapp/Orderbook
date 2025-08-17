@@ -1,25 +1,8 @@
 #include "tests/helpers/test_utils.h"
 
-Order *test_utils::create_order(ID id, Price price, Quantity qty, Direction dir,
-                                OrderType type) {
-  return new Order{.price = price,
-                   .type = type,
-                   .direction = dir,
-                   .initial_quantity = qty,
-                   .remaining_quantity = qty,
-                   .time = std::chrono::system_clock::now(),
-                   .cur_level = nullptr,
-                   .id = id};
+NewOrderData test_utils::create_order(ID id, Price price, Quantity qty,
+                                      Direction dir, OrderType type) {
+  return NewOrderData{id, price, qty, dir, type};
 }
 
-Message test_utils::create_order_message(ID id, Price price, Quantity qty,
-                                         Direction dir, OrderType type) {
-  return Message{create_order(id, price, qty, dir, type)};
-}
-Message test_utils::create_cancel_message(ID id) { return Message{Cancel{id}}; }
-
-/**
-TODO: For when we implement FOK orders
-Order create_timed_order(ID id, Price price, Quantity qty, Direction dir,
-                         std::chrono::milliseconds offset);
-*/
+CancelData test_utils::create_cancel_message(ID id) { return CancelData{id}; }
