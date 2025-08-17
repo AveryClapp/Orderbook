@@ -2,12 +2,16 @@
 
 #include "include/core/Message.h"
 #include "include/core/Order.h"
+#include "include/core/OrderPool.h"
 #include "include/core/OrderbookLevels.h"
 #include "include/core/Using.h"
+
+#define POOL_SIZE 10000
 
 class Orderbook {
 private:
   OrderbookLevels levels_;
+  OrderPool order_pool_;
 
   std::unordered_map<ID, Order *> order_map_;
 
@@ -15,10 +19,10 @@ private:
   void handle_sell(Order *order);
   void handle_cancel(const ID cancel_id);
 
-  bool can_fill(const Order &order);
+  bool can_fill(const NewOrderData &order);
 
 public:
-  Orderbook() = default;
+  Orderbook();
 
   void receive_message(Message msg);
 

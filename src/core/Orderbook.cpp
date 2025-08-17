@@ -1,27 +1,35 @@
 #include "include/core/Orderbook.h"
+#include "include/core/Message.h"
 #include <algorithm>
 #include <cassert>
 #include <ctime>
+
+Orderbook::Orderbook() : order_pool_(POOL_SIZE) {}
 
 /**
  * Upon receiving an order, send it to a function that handles its direction.
  */
 void Orderbook::receive_message(Message msg) {
-  if (std::holds_alternative<Cancel>(msg.data)) {
-    Cancel &cancel = std::get<Cancel>(msg.data);
-    handle_cancel(cancel.cancel_id);
-  } else if (std::holds_alternative<Order *>(msg.data)) {
-    Order *order = std::get<Order *>(msg.data);
-    if (order->type == OrderType::FillOrKill && !can_fill(*order)) {
+  if (std::holds_alternative<CancelData>(msg.data)) {
+    CancelData &cancel = std::get<CancelData>(msg.data);
+    handle_cancel(cancel.order_id);
+  } else if (std::holds_alternative<NewOrderData>(msg.data)) {
+    NewOrderData metadata = std::get<NewOrderData>(msg.data);
+    if (metadata.type == OrderType::FillOrKill && !can_fill(metadata)) {
       return; // Can't fill, exit here.
     }
+    Order *order = order_pool_.get();
+    order->price = metadata.price;
+    order->id = metadata.id;
+    order->remaining_quantity = metadata.quantity;
+    order->initial_quantity = metadata.quantity;
+    order->direction = metadata.direction;
+    order->time = std::chrono::system_clock::now();
     if (order->direction == Direction::Buy) {
       handle_buy(order);
     } else {
       handle_sell(order);
     }
-  } else {
-    throw std::runtime_error("Impossible Dud");
   }
 }
 
@@ -40,7 +48,7 @@ void Orderbook::handle_sell(Order *sell_order) {
       if (now - order->time >= std::chrono::hours(24) &&
           order->type == OrderType::GoodForDay) {
         order_it = level.orders.erase(order_it);
-        delete order;
+        order_pool_.release(order);
         continue;
       }
       Quantity consumed =
@@ -51,7 +59,7 @@ void Orderbook::handle_sell(Order *sell_order) {
       if (order->remaining_quantity == 0) {
         order_it = level.orders.erase(order_it);
         order_map_.erase(order->id);
-        delete order;
+        order_pool_.release(order);
       } else {
         ++order_it;
       }
@@ -66,7 +74,7 @@ void Orderbook::handle_sell(Order *sell_order) {
     levels_.add_ask(sell_order);
     order_map_[sell_order->id] = sell_order;
   } else {
-    delete sell_order;
+    order_pool_.release(sell_order);
   }
 }
 
@@ -85,7 +93,7 @@ void Orderbook::handle_buy(Order *buy_order) {
       if (now - order->time >= std::chrono::hours(24) &&
           order->type == OrderType::GoodForDay) {
         order_it = level.orders.erase(order_it);
-        delete order;
+        order_pool_.release(order);
         continue;
       }
       Quantity consumed =
@@ -96,7 +104,7 @@ void Orderbook::handle_buy(Order *buy_order) {
       if (order->remaining_quantity == 0) {
         order_it = level.orders.erase(order_it);
         order_map_.erase(order->id);
-        delete order;
+        order_pool_.release(order);
       } else {
         ++order_it;
       }
@@ -111,7 +119,7 @@ void Orderbook::handle_buy(Order *buy_order) {
     levels_.add_bid(buy_order);
     order_map_[buy_order->id] = buy_order;
   } else {
-    delete buy_order;
+    order_pool_.release(buy_order);
   }
 }
 
@@ -127,7 +135,7 @@ void Orderbook::handle_cancel(const ID cancel_id) {
   target_level.cancel_order(order->level_position);
 
   order_map_.erase(cancel_id);
-  delete order;
+  order_pool_.release(order);
 }
 
 std::optional<std::pair<Price, size_t>> Orderbook::get_best_bid() {
@@ -148,12 +156,12 @@ std::optional<std::pair<Price, size_t>> Orderbook::get_best_ask() {
   return std::make_pair(best.first, best.second.orders.size());
 }
 
-bool Orderbook::can_fill(const Order &order) {
+bool Orderbook::can_fill(const NewOrderData &order_data) {
   Quantity matched_quantity = 0;
-  if (order.direction == Direction::Sell) {
+  if (order_data.direction == Direction::Sell) {
     auto &bids = levels_.get_bids();
     for (const auto &[price, level] : bids) {
-      if (price < order.price || matched_quantity > order.initial_quantity) {
+      if (price < order_data.price || matched_quantity > order_data.quantity) {
         break;
       }
       matched_quantity += level.total_quantity;
@@ -161,11 +169,11 @@ bool Orderbook::can_fill(const Order &order) {
   } else {
     auto &asks = levels_.get_asks();
     for (const auto &[price, level] : asks) {
-      if (price > order.price || matched_quantity > order.initial_quantity) {
+      if (price > order_data.price || matched_quantity > order_data.quantity) {
         break;
       }
       matched_quantity += level.total_quantity;
     }
   }
-  return matched_quantity >= order.initial_quantity;
+  return matched_quantity >= order_data.quantity;
 }
