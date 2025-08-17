@@ -25,4 +25,4 @@ OrderCancellation: 798 ns
 
 Nothing too note here since we don't have much to compare to. Although, it looks like our best bid and ask orders are in L1 cache due to the 1.19 ns response time.
 
-### Iteration 2: Reducing Branching
+### Iteration 2: Order Pooling

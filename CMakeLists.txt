@@ -30,6 +30,7 @@ add_executable(myapp
     src/main.cpp 
     src/core/Orderbook.cpp
     src/core/OrderbookLevels.cpp
+    src/core/OrderPool.cpp
 )
 
 target_link_libraries(myapp boost::boost)
@@ -42,6 +43,7 @@ set(HEADERS
     include/core/Orderbook.h
     include/core/Using.h
     include/core/Order.h
+    include/core/OrderPool.h
 )
 
 target_sources(myapp PRIVATE ${HEADERS})
