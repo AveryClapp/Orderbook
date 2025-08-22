@@ -42,12 +42,11 @@ void Orderbook::handle_sell(Order *sell_order) {
     if (price < sell_order->price) {
       break;
     }
-    auto order_it = level.orders.begin();
-    while (order_it != level.orders.end()) {
-      auto *order = *order_it;
+    while (!level.orders.empty() && sell_order->remaining_quantity > 0) {
+      auto *order = level.orders.front();
       if (now - order->time >= std::chrono::hours(24) &&
           order->type == OrderType::GoodForDay) {
-        order_it = level.orders.erase(order_it);
+        level.orders.pop_front();
         order_pool_.release(order);
         continue;
       }
@@ -57,12 +56,10 @@ void Orderbook::handle_sell(Order *sell_order) {
       sell_order->remaining_quantity -= consumed;
       level.total_quantity -= consumed;
       if (order->remaining_quantity == 0) {
-        order_it = level.orders.erase(order_it);
+        level.orders.pop_front();
         order_map_.erase(order->id);
         order_pool_.release(order);
-      } else {
-        ++order_it;
-      }
+      } // Otherwise, order is fulfilled and while loop is done
     }
     if (level.orders.empty()) {
       it = bids.erase(it);
@@ -87,12 +84,11 @@ void Orderbook::handle_buy(Order *buy_order) {
     if (price > buy_order->price) {
       break;
     }
-    auto order_it = level.orders.begin();
-    while (order_it != level.orders.end()) {
-      auto *order = *order_it;
+    while (!level.orders.empty() && buy_order->remaining_quantity > 0) {
+      auto *order = level.orders.front();
       if (now - order->time >= std::chrono::hours(24) &&
           order->type == OrderType::GoodForDay) {
-        order_it = level.orders.erase(order_it);
+        level.orders.pop_front();
         order_pool_.release(order);
         continue;
       }
@@ -102,11 +98,9 @@ void Orderbook::handle_buy(Order *buy_order) {
       buy_order->remaining_quantity -= consumed;
       level.total_quantity -= consumed;
       if (order->remaining_quantity == 0) {
-        order_it = level.orders.erase(order_it);
+        level.orders.pop_front();
         order_map_.erase(order->id);
         order_pool_.release(order);
-      } else {
-        ++order_it;
       }
     }
     if (level.orders.empty()) {
