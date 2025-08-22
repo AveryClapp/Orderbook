@@ -10,10 +10,9 @@ protected:
 };
 
 TEST_F(OrderbookCoreTest, TestAddSingleBuyOrder) {
-  Message buy_msg =
-      test_utils::create_order_message(1, 100, 50, Direction::Buy);
-
-  orderbook->receive_message(buy_msg);
+  NewOrderData buy_msg = test_utils::create_order(1, 100, 50, Direction::Buy);
+  Message message{buy_msg};
+  orderbook->receive_message(message);
   auto result = orderbook->get_best_bid();
   ASSERT_TRUE(result.has_value());
   EXPECT_EQ((std::pair{100, 1}), result.value());
@@ -22,10 +21,9 @@ TEST_F(OrderbookCoreTest, TestAddSingleBuyOrder) {
 }
 
 TEST_F(OrderbookCoreTest, TestAddSingleSellOrder) {
-  Message sell_msg =
-      test_utils::create_order_message(1, 105, 30, Direction::Sell);
-
-  orderbook->receive_message(sell_msg);
+  NewOrderData sell_msg = test_utils::create_order(1, 105, 30, Direction::Sell);
+  Message message{sell_msg};
+  orderbook->receive_message(message);
 
   auto ask_result = orderbook->get_best_ask();
   ASSERT_TRUE(ask_result.has_value());
@@ -35,11 +33,13 @@ TEST_F(OrderbookCoreTest, TestAddSingleSellOrder) {
 }
 
 TEST_F(OrderbookCoreTest, TestMultipleBuyOrdersSamePrice) {
-  Message buy1 = test_utils::create_order_message(1, 100, 25, Direction::Buy);
-  Message buy2 = test_utils::create_order_message(2, 100, 35, Direction::Buy);
+  NewOrderData buy1 = test_utils::create_order(1, 100, 25, Direction::Buy);
+  NewOrderData buy2 = test_utils::create_order(2, 100, 35, Direction::Buy);
+  Message message1{buy1};
+  Message message2{buy2};
 
-  orderbook->receive_message(buy1);
-  orderbook->receive_message(buy2);
+  orderbook->receive_message(message1);
+  orderbook->receive_message(message2);
 
   auto bid_result = orderbook->get_best_bid();
   ASSERT_TRUE(bid_result.has_value());
@@ -47,10 +47,12 @@ TEST_F(OrderbookCoreTest, TestMultipleBuyOrdersSamePrice) {
 }
 
 TEST_F(OrderbookCoreTest, TestMultipleBuyOrdersDifferentPrices) {
-  Message buy_high =
-      test_utils::create_order_message(1, 102, 25, Direction::Buy);
-  Message buy_low = test_utils::create_order_message(2, 98, 35, Direction::Buy);
-
+  NewOrderData buy_high_data =
+      test_utils::create_order(1, 102, 25, Direction::Buy);
+  NewOrderData buy_low_data =
+      test_utils::create_order(2, 98, 35, Direction::Buy);
+  Message buy_high{buy_high_data};
+  Message buy_low{buy_low_data};
   orderbook->receive_message(buy_high);
   orderbook->receive_message(buy_low);
 
@@ -60,11 +62,13 @@ TEST_F(OrderbookCoreTest, TestMultipleBuyOrdersDifferentPrices) {
 }
 
 TEST_F(OrderbookCoreTest, TestMultipleSellOrdersDifferentPrices) {
-  Message sell_low =
-      test_utils::create_order_message(1, 105, 25, Direction::Sell);
-  Message sell_high =
-      test_utils::create_order_message(2, 110, 35, Direction::Sell);
+  NewOrderData sell_low_data =
+      test_utils::create_order(1, 105, 25, Direction::Sell);
+  NewOrderData sell_high_data =
+      test_utils::create_order(2, 110, 35, Direction::Sell);
 
+  Message sell_high{sell_high_data};
+  Message sell_low{sell_low_data};
   orderbook->receive_message(sell_low);
   orderbook->receive_message(sell_high);
 
@@ -74,12 +78,12 @@ TEST_F(OrderbookCoreTest, TestMultipleSellOrdersDifferentPrices) {
 }
 
 TEST_F(OrderbookCoreTest, TestExactMatch) {
-  Message sell_msg =
-      test_utils::create_order_message(1, 100, 50, Direction::Sell);
+  NewOrderData sell_data =
+      test_utils::create_order(1, 100, 50, Direction::Sell);
+  Message sell_msg{sell_data};
   orderbook->receive_message(sell_msg);
-
-  Message buy_msg =
-      test_utils::create_order_message(2, 100, 50, Direction::Buy);
+  NewOrderData buy_data = test_utils::create_order(2, 100, 50, Direction::Buy);
+  Message buy_msg{buy_data};
   orderbook->receive_message(buy_msg);
 
   ASSERT_FALSE(orderbook->get_best_bid().has_value());
@@ -87,12 +91,13 @@ TEST_F(OrderbookCoreTest, TestExactMatch) {
 }
 
 TEST_F(OrderbookCoreTest, TestPartialFillBuyAggressive) {
-  Message sell_msg =
-      test_utils::create_order_message(1, 100, 100, Direction::Sell);
+  NewOrderData sell_data =
+      test_utils::create_order(1, 100, 100, Direction::Sell);
+  Message sell_msg{sell_data};
   orderbook->receive_message(sell_msg);
 
-  Message buy_msg =
-      test_utils::create_order_message(2, 100, 30, Direction::Buy);
+  NewOrderData buy_data = test_utils::create_order(2, 100, 30, Direction::Buy);
+  Message buy_msg{buy_data};
   orderbook->receive_message(buy_msg);
 
   auto ask_result = orderbook->get_best_ask();
@@ -103,12 +108,13 @@ TEST_F(OrderbookCoreTest, TestPartialFillBuyAggressive) {
 }
 
 TEST_F(OrderbookCoreTest, TestPartialFillSellAggressive) {
-  Message buy_msg =
-      test_utils::create_order_message(1, 100, 100, Direction::Buy);
+  NewOrderData buy_data = test_utils::create_order(1, 100, 100, Direction::Buy);
+  Message buy_msg{buy_data};
   orderbook->receive_message(buy_msg);
 
-  Message sell_msg =
-      test_utils::create_order_message(2, 100, 40, Direction::Sell);
+  NewOrderData sell_data =
+      test_utils::create_order(2, 100, 40, Direction::Sell);
+  Message sell_msg{sell_data};
   orderbook->receive_message(sell_msg);
 
   auto bid_result = orderbook->get_best_bid();
@@ -119,13 +125,16 @@ TEST_F(OrderbookCoreTest, TestPartialFillSellAggressive) {
 }
 
 TEST_F(OrderbookCoreTest, TestMultipleLevelConsumption) {
-  Message sell1 = test_utils::create_order_message(1, 100, 25, Direction::Sell);
-  Message sell2 = test_utils::create_order_message(2, 101, 30, Direction::Sell);
-  Message sell3 = test_utils::create_order_message(3, 102, 20, Direction::Sell);
+  NewOrderData sell1 = test_utils::create_order(1, 100, 25, Direction::Sell);
+  NewOrderData sell2 = test_utils::create_order(2, 101, 30, Direction::Sell);
+  NewOrderData sell3 = test_utils::create_order(3, 102, 20, Direction::Sell);
 
-  orderbook->receive_message(sell1);
-  orderbook->receive_message(sell2);
-  orderbook->receive_message(sell3);
+  Message sell1_msg{sell1};
+  Message sell2_msg{sell2};
+  Message sell3_msg{sell3};
+  orderbook->receive_message(sell1_msg);
+  orderbook->receive_message(sell2_msg);
+  orderbook->receive_message(sell3_msg);
 
   auto ask_result = orderbook->get_best_ask();
   ASSERT_TRUE(ask_result.has_value());
@@ -135,12 +144,13 @@ TEST_F(OrderbookCoreTest, TestMultipleLevelConsumption) {
 }
 
 TEST_F(OrderbookCoreTest, TestPriceImprovement) {
-  Message sell_msg =
-      test_utils::create_order_message(1, 105, 50, Direction::Sell);
+  NewOrderData sell_data =
+      test_utils::create_order(1, 105, 50, Direction::Sell);
+  Message sell_msg{sell_data};
   orderbook->receive_message(sell_msg);
 
-  Message buy_msg =
-      test_utils::create_order_message(2, 110, 25, Direction::Buy);
+  NewOrderData buy_data = test_utils::create_order(2, 110, 25, Direction::Buy);
+  Message buy_msg{buy_data};
   orderbook->receive_message(buy_msg);
 
   auto ask_result = orderbook->get_best_ask();
@@ -152,12 +162,14 @@ TEST_F(OrderbookCoreTest, TestPriceImprovement) {
 }
 
 TEST_F(OrderbookCoreTest, TestFillOrKillInvalid) {
-  Message sell_msg =
-      test_utils::create_order_message(1, 105, 50, Direction::Sell);
+  NewOrderData sell_data =
+      test_utils::create_order(1, 105, 50, Direction::Sell);
+  Message sell_msg{sell_data};
   orderbook->receive_message(sell_msg);
 
-  Message buy_msg = test_utils::create_order_message(2, 110, 51, Direction::Buy,
-                                                     OrderType::FillOrKill);
+  NewOrderData buy_data = test_utils::create_order(2, 110, 51, Direction::Buy,
+                                                   OrderType::FillOrKill);
+  Message buy_msg{buy_data};
   orderbook->receive_message(buy_msg);
 
   auto ask_result = orderbook->get_best_ask();
@@ -169,12 +181,14 @@ TEST_F(OrderbookCoreTest, TestFillOrKillInvalid) {
 }
 
 TEST_F(OrderbookCoreTest, TestFillOrKillValid) {
-  Message sell_msg =
-      test_utils::create_order_message(1, 105, 50, Direction::Sell);
+  NewOrderData sell_data =
+      test_utils::create_order(1, 105, 50, Direction::Sell);
+  Message sell_msg{sell_data};
   orderbook->receive_message(sell_msg);
 
-  Message buy_msg = test_utils::create_order_message(2, 110, 50, Direction::Buy,
-                                                     OrderType::FillOrKill);
+  NewOrderData buy_data = test_utils::create_order(2, 110, 50, Direction::Buy,
+                                                   OrderType::FillOrKill);
+  Message buy_msg{buy_data};
   orderbook->receive_message(buy_msg);
 
   EXPECT_EQ(std::nullopt, orderbook->get_best_ask());

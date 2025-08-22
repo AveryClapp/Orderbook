@@ -61,6 +61,7 @@ add_executable(tests
     ${TEST_SOURCES}
     src/core/Orderbook.cpp
     src/core/OrderbookLevels.cpp
+    src/core/OrderPool.cpp
     tests/helpers/test_utils.cpp
 )
 
@@ -69,6 +70,7 @@ if(benchmark_FOUND)
         benchmarks/benchmarks.cpp
         src/core/Orderbook.cpp
         src/core/OrderbookLevels.cpp
+        src/core/OrderPool.cpp
         tests/helpers/test_utils.cpp
     )
     

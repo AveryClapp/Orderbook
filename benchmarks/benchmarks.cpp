@@ -10,7 +10,7 @@ static void BM_AddOrdersEmpty(benchmark::State &state) {
   for (auto _ : state) {
     state.PauseTiming();
     Orderbook orderbook;
-    auto order = test_utils::create_order(1UL, 100, 50, Direction::Buy);
+    NewOrderData order = test_utils::create_order(1UL, 100, 50, Direction::Buy);
     Message msg{order};
     state.ResumeTiming();
 
@@ -31,9 +31,9 @@ static void BM_AddOrdersPopulated(benchmark::State &state) {
 
     // Pre-populate the orderbook
     for (int i = 0; i < book_depth; ++i) {
-      auto buy_order = test_utils::create_order(
+      NewOrderData buy_order = test_utils::create_order(
           static_cast<unsigned long>(i) * 2UL, 100 - i, 50, Direction::Buy);
-      auto sell_order =
+      NewOrderData sell_order =
           test_utils::create_order(static_cast<unsigned long>(i) * 2UL + 1,
                                    105 + i, 50, Direction::Sell);
       orderbook.receive_message(Message{buy_order});
@@ -112,7 +112,7 @@ static void BM_OrderCancellation(benchmark::State &state) {
     for (int i = 0; i < order_count; ++i) {
       auto order = test_utils::create_order(static_cast<unsigned long>(i), 100,
                                             50, Direction::Buy);
-      order_ids.push_back(order->id);
+      order_ids.push_back(order.id);
       orderbook.receive_message(Message{order});
     }
 
@@ -122,10 +122,10 @@ static void BM_OrderCancellation(benchmark::State &state) {
     std::uniform_int_distribution<unsigned long> dis(0UL,
                                                      order_ids.size() - 1UL);
     ID cancel_id = order_ids[static_cast<unsigned long>(dis(gen))];
-    Message cancel_msg = test_utils::create_cancel_message(cancel_id);
+    CancelData cancel_msg = test_utils::create_cancel_message(cancel_id);
     state.ResumeTiming();
 
-    orderbook.receive_message(cancel_msg);
+    orderbook.receive_message(Message{cancel_msg});
 
     benchmark::DoNotOptimize(orderbook);
   }
