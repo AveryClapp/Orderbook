@@ -11,7 +11,7 @@ static void BM_AddOrdersEmpty(benchmark::State &state) {
     state.PauseTiming();
     Orderbook orderbook;
     NewOrderData order = test_utils::create_order(1UL, 100, 50, Direction::Buy);
-    Message msg{order};
+    Message msg{MessageType::Order, {.new_order = order}};
     state.ResumeTiming();
 
     orderbook.receive_message(msg);
@@ -36,14 +36,16 @@ static void BM_AddOrdersPopulated(benchmark::State &state) {
       NewOrderData sell_order =
           test_utils::create_order(static_cast<unsigned long>(i) * 2UL + 1,
                                    105 + i, 50, Direction::Sell);
-      orderbook.receive_message(Message{buy_order});
-      orderbook.receive_message(Message{sell_order});
+      orderbook.receive_message(
+          Message{MessageType::Order, {.new_order = buy_order}});
+      orderbook.receive_message(
+          Message{MessageType::Order, {.new_order = sell_order}});
     }
 
     auto new_order = test_utils::create_order(
         static_cast<unsigned long>(book_depth) * 2UL + 1UL, 102, 25,
         Direction::Buy);
-    Message msg{new_order};
+    Message msg{MessageType::Order, {.new_order = new_order}};
     state.ResumeTiming();
 
     orderbook.receive_message(msg);
@@ -61,11 +63,12 @@ static void BM_OrderMatching(benchmark::State &state) {
 
     // Add a sell order
     auto sell_order = test_utils::create_order(1UL, 100, 100, Direction::Sell);
-    orderbook.receive_message(Message{sell_order});
+    orderbook.receive_message(
+        Message{MessageType::Order, {.new_order = sell_order}});
 
     // Create matching buy order
     auto buy_order = test_utils::create_order(2UL, 100, 50, Direction::Buy);
-    Message msg{buy_order};
+    Message msg{MessageType::Order, {.new_order = buy_order}};
     state.ResumeTiming();
 
     orderbook.receive_message(msg);
@@ -85,8 +88,10 @@ static void BM_BestBidAsk(benchmark::State &state) {
         static_cast<unsigned long>(i) * 2UL, 100 - i, 50, Direction::Buy);
     auto sell_order = test_utils::create_order(
         static_cast<unsigned long>(i) * 2UL + 1, 105 + i, 50, Direction::Sell);
-    orderbook.receive_message(Message{buy_order});
-    orderbook.receive_message(Message{sell_order});
+    orderbook.receive_message(
+        Message{MessageType::Order, {.new_order = buy_order}});
+    orderbook.receive_message(
+        Message{MessageType::Order, {.new_order = sell_order}});
   }
 
   for (auto _ : state) {
@@ -113,7 +118,8 @@ static void BM_OrderCancellation(benchmark::State &state) {
       auto order = test_utils::create_order(static_cast<unsigned long>(i), 100,
                                             50, Direction::Buy);
       order_ids.push_back(order.id);
-      orderbook.receive_message(Message{order});
+      orderbook.receive_message(
+          Message{MessageType::Order, {.new_order = order}});
     }
 
     // Choose a random order to cancel
@@ -123,9 +129,10 @@ static void BM_OrderCancellation(benchmark::State &state) {
                                                      order_ids.size() - 1UL);
     ID cancel_id = order_ids[static_cast<unsigned long>(dis(gen))];
     CancelData cancel_msg = test_utils::create_cancel_message(cancel_id);
+    Message cancel_message{MessageType::Cancel, {.cancel = cancel_msg}};
     state.ResumeTiming();
 
-    orderbook.receive_message(Message{cancel_msg});
+    orderbook.receive_message(cancel_message);
 
     benchmark::DoNotOptimize(orderbook);
   }

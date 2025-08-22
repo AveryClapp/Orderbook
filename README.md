@@ -15,17 +15,17 @@ Some Specs:
 - L2 Data Cache: 4096 KiB
 - 8 x 2400 MHz CPUs (more on this later)
 
-### Iteration 1: The Starting Point (dud)
+### Iteration 1: The Starting Point
 
-AddOrdersEmpty: 907 ns  
-AddOrdersPopulated: 1054 ns  
-OrderMatching: 809 ns  
+AddOrdersEmpty: 1162 ns  
+AddOrdersPopulated: 1264 ns  
+OrderMatching: 989 ns  
 BestBidAsk: 1.19 ns  
-OrderCancellation: 798 ns
+OrderCancellation: 913 ns
 
 ### Iteration 2: Order Pooling
 
-AddOrdersEmpty: 1089
+AddOrdersEmpty: 1089 ns
 AddOrdersPopulated: 1214 ns  
 OrderMatching: 914 ns  
 BestBidAsk: 1.19 ns  

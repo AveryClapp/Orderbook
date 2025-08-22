@@ -1,6 +1,7 @@
 #pragma once
+#include <cstdint>
 
-enum class Direction {
+enum class Direction : uint8_t {
   Buy,
   Sell,
 };

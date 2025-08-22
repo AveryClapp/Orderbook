@@ -1,6 +1,7 @@
 #pragma once
+#include <cstdint>
 
-enum class OrderType {
+enum class OrderType : uint8_t {
   FillOrKill,
   GoodTilCancel,
   GoodForDay,

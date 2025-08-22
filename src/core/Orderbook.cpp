@@ -10,26 +10,26 @@ Orderbook::Orderbook() : order_pool_(POOL_SIZE) {}
  * Upon receiving an order, send it to a function that handles its direction.
  */
 void Orderbook::receive_message(Message msg) {
-  if (std::holds_alternative<CancelData>(msg.data)) {
-    CancelData &cancel = std::get<CancelData>(msg.data);
+  if (msg.type == MessageType::Cancel) {
+    CancelData &cancel = msg.data.cancel;
     handle_cancel(cancel.order_id);
-  } else if (std::holds_alternative<NewOrderData>(msg.data)) {
-    NewOrderData metadata = std::get<NewOrderData>(msg.data);
-    if (metadata.type == OrderType::FillOrKill && !can_fill(metadata)) {
-      return; // Can't fill, exit here.
-    }
-    Order *order = order_pool_.get();
-    order->price = metadata.price;
-    order->id = metadata.id;
-    order->remaining_quantity = metadata.quantity;
-    order->initial_quantity = metadata.quantity;
-    order->direction = metadata.direction;
-    order->time = std::chrono::system_clock::now();
-    if (order->direction == Direction::Buy) {
-      handle_buy(order);
-    } else {
-      handle_sell(order);
-    }
+    return;
+  }
+  NewOrderData metadata = msg.data.new_order;
+  if (metadata.type == OrderType::FillOrKill && !can_fill(metadata)) {
+    return; // Can't fill, exit here.
+  }
+  Order *order = order_pool_.get();
+  order->price = metadata.price;
+  order->id = metadata.id;
+  order->remaining_quantity = metadata.quantity;
+  order->initial_quantity = metadata.quantity;
+  order->direction = metadata.direction;
+  order->time = std::chrono::system_clock::now();
+  if (order->direction == Direction::Buy) {
+    handle_buy(order);
+  } else {
+    handle_sell(order);
   }
 }
 
@@ -126,8 +126,12 @@ void Orderbook::handle_cancel(const ID cancel_id) {
   Level &target_level = (order->direction == Direction::Buy)
                             ? levels_.get_bids()[order->price]
                             : levels_.get_asks()[order->price];
-  target_level.cancel_order(order->level_position);
+  target_level.orders.erase(target_level.orders.begin() +
+                            static_cast<std::ptrdiff_t>(order->level_position));
 
+  for (size_t i = order->level_position; i < target_level.orders.size(); i++) {
+    target_level.orders[i]->level_position = i;
+  }
   order_map_.erase(cancel_id);
   order_pool_.release(order);
 }
