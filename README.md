@@ -15,7 +15,7 @@ Some Specs:
 - L2 Data Cache: 4096 KiB
 - 8 x 2400 MHz CPUs (more on this later)
 
-### Iteration 1: The Starting Point
+### Iteration 1: The Starting Point (dud)
 
 AddOrdersEmpty: 907 ns  
 AddOrdersPopulated: 1054 ns  
@@ -23,6 +23,10 @@ OrderMatching: 809 ns
 BestBidAsk: 1.19 ns  
 OrderCancellation: 798 ns
 
-Nothing too note here since we don't have much to compare to. Although, it looks like our best bid and ask orders are in L1 cache due to the 1.19 ns response time.
-
 ### Iteration 2: Order Pooling
+
+AddOrdersEmpty: 1089
+AddOrdersPopulated: 1214 ns  
+OrderMatching: 914 ns  
+BestBidAsk: 1.19 ns  
+OrderCancellation: 890 ns
