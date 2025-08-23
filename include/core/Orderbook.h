@@ -24,7 +24,7 @@ private:
 public:
   Orderbook();
 
-  void receive_message(Message msg);
+  void receive_message(const Message &msg);
 
   void print_book();
 

@@ -7,9 +7,9 @@
 #include <deque>
 
 struct Level {
-  Price price;             // 4 bytes
-  Quantity total_quantity; // 4 bytes
-  std::deque<Order *> orders;
+  Price price;                // 4 bytes
+  Quantity total_quantity;    // 4 bytes
+  std::deque<Order *> orders; // A lot of bytes.
 };
 
 template <typename Compare>

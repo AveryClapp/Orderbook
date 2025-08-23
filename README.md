@@ -31,4 +31,10 @@ OrderMatching: 914 ns
 BestBidAsk: 1.19 ns  
 OrderCancellation: 890 ns
 
-### Iteration 3: Cache Friendliness
+### Iteration 3: Cache Friendliness & Optimized Condition Checks
+
+AddOrdersEmpty: 1056 ns
+AddOrdersPopulated: 1185 ns  
+OrderMatching: 1169 ns  
+BestBidAsk: 1.19 ns  
+OrderCancellation: 886 ns
