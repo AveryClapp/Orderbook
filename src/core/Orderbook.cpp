@@ -160,7 +160,7 @@ bool Orderbook::can_fill(const NewOrderData &order_data) {
   const Quantity target_quantity = order_data.quantity;
   const Price order_price = order_data.price;
   if (order_data.direction == Direction::Sell) {
-    auto &bids = levels_.get_bids();
+    const auto &bids = levels_.get_bids();
     for (const auto &[price, level] : bids) {
       if (price < order_price) {
         break;
@@ -171,7 +171,7 @@ bool Orderbook::can_fill(const NewOrderData &order_data) {
       }
     }
   } else {
-    auto &asks = levels_.get_asks();
+    const auto &asks = levels_.get_asks();
     for (const auto &[price, level] : asks) {
       if (price > order_price) {
         break;
