@@ -89,7 +89,7 @@ void Orderbook::handle_buy(Order *buy_order) {
       break;
     }
     while (buy_order->quantity > 0) {
-      if (!level.orders.empty())
+      if (level.orders.empty())
         break;
       Order *const order = level.orders.front();
       if (order->type == OrderType::GoodForDay && order->time <= cutoff) {
