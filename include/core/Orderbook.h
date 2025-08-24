@@ -5,6 +5,9 @@
 #include "include/core/OrderPool.h"
 #include "include/core/OrderbookLevels.h"
 #include "include/core/Using.h"
+#include <unordered_map>
+#include <optional>
+
 
 #define POOL_SIZE 10000
 

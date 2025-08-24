@@ -1,5 +1,6 @@
 #include "include/core/OrderPool.h"
 #include <cstddef>
+#include <vector>
 
 OrderPool::OrderPool(size_t num) {
   pool_.reserve(num);

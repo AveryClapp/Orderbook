@@ -1,6 +1,7 @@
 # Prerequisites
 *.d
 
+perf.data
 build/
 CMakeFiles/
 cmake-build-debug/
