@@ -8,7 +8,7 @@ set(CMAKE_CXX_FLAGS_DEBUG
     "-g -O0 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Wnon-virtual-dtor -Wold-style-cast -Wcast-align -Wunused -Woverloaded-virtual"
 )
 set(CMAKE_CXX_FLAGS_RELEASE 
-    "-O3 -DNDEBUG -march=native -mtune=native -flto -ffast-math -funroll-loops -finline-functions -fomit-frame-pointer"
+    "-O3 -DNDEBUG -march=native -mtune=native -flto -ffast-math -funroll-loops -finline-functions -fno-omit-frame-pointer -g1"
 )
 
 
@@ -78,8 +78,11 @@ if(benchmark_FOUND)
     target_link_libraries(benchmarks Boost::boost)
     target_include_directories(benchmarks PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
     
-    add_custom_target(run_benchmarks
-        COMMAND benchmarks --benchmark_format=console
+    # Add perf profiling target
+    add_custom_target(profile
+        COMMAND echo "Starting perf profiling..."
+        COMMAND perf record -g --call-graph=dwarf -o perf.data $<TARGET_FILE:benchmarks>
+        COMMAND echo "Profiling complete. Run 'perf report' to view results."
         DEPENDS benchmarks
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     )

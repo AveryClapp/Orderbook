@@ -11,12 +11,19 @@
 
 #define POOL_SIZE 10000
 
+// Custom hash since all IDs are unique
+struct IDHash {
+    size_t operator()(ID id) const noexcept {
+        return static_cast<size_t>(id);
+    }
+};
+
 class Orderbook {
 private:
   OrderbookLevels levels_;
   OrderPool order_pool_;
 
-  std::unordered_map<ID, Order *> order_map_;
+  std::unordered_map<ID, Order *, IDHash> order_map_;
 
   void handle_buy(Order *order);
   void handle_sell(Order *order);
