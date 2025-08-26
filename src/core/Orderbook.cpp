@@ -129,12 +129,7 @@ void Orderbook::handle_cancel(const ID cancel_id) {
                             ? levels_.get_bids()[order->price]
                             : levels_.get_asks()[order->price];
 
-  target_level.orders.erase(target_level.orders.begin() +
-                            static_cast<std::ptrdiff_t>(order->level_position));
-
-  for (size_t i = order->level_position; i < target_level.orders.size(); ++i) {
-    target_level.orders[i]->level_position = i;
-  }
+  target_level.orders.erase(static_cast<std::ptrdiff_t>(order->level_position));
 
   order_map_.erase(cancel_id);
   order_pool_.release(order);

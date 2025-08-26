@@ -5,17 +5,14 @@
 #include "include/core/OrderPool.h"
 #include "include/core/OrderbookLevels.h"
 #include "include/core/Using.h"
-#include <unordered_map>
 #include <optional>
+#include <unordered_map>
 
-
-#define POOL_SIZE 10000
+#define POOL_SIZE 100000
 
 // Custom hash since all IDs are unique
 struct IDHash {
-    size_t operator()(ID id) const noexcept {
-        return static_cast<size_t>(id);
-    }
+  size_t operator()(ID id) const noexcept { return static_cast<size_t>(id); }
 };
 
 class Orderbook {
