@@ -21,6 +21,7 @@ void Orderbook::receive_message(const Message &msg) {
                    .quantity = metadata.quantity,
                    .id = metadata.id,
                    .time = std::chrono::system_clock::now(),
+                   .type = metadata.type,
                    .direction = metadata.direction};
     if (metadata.direction == Direction::Buy) {
       handle_buy(order);
@@ -131,6 +132,10 @@ void Orderbook::handle_cancel(const ID cancel_id) {
 
   target_level.orders.erase(target_level.orders.begin() +
                             static_cast<std::ptrdiff_t>(order->level_position));
+
+  for (size_t i = order->level_position; i < target_level.orders.size(); ++i) {
+    target_level.orders[i]->level_position = i;
+  }
 
   order_map_.erase(cancel_id);
   order_pool_.release(order);

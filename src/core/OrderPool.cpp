@@ -25,4 +25,3 @@ std::ptrdiff_t OrderPool::get_index(Order *order) {
   // C++ implicitly divides by sizeof(Order) here
   return order - pool_.data();
 }
-
