@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Direction.h"
-#include "OrderType.h"
 #include "Using.h"
 #include <list>
 
@@ -15,6 +14,5 @@ struct Order {
   Quantity quantity;          // 4 Bytes
   ID id;                      // 8 Bytes
   ListIterator list_iterator; // 8 bytes
-  OrderType type;             // 1 Byte
   Direction direction;        // 1 Byte
 };

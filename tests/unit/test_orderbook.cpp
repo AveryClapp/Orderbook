@@ -161,37 +161,3 @@ TEST_F(OrderbookCoreTest, TestPriceImprovement) {
   // Bid quantity should be completely matched, no leftover bid
   EXPECT_EQ(std::nullopt, orderbook->get_best_bid());
 }
-
-TEST_F(OrderbookCoreTest, TestFillOrKillInvalid) {
-  NewOrderData sell_data =
-      test_utils::create_order(1, 105, 50, Direction::Sell);
-  Message sell_msg{MessageType::Order, {.new_order = sell_data}};
-  orderbook->receive_message(sell_msg);
-
-  NewOrderData buy_data = test_utils::create_order(2, 110, 51, Direction::Buy,
-                                                   OrderType::FillOrKill);
-  Message buy_msg{MessageType::Order, {.new_order = buy_data}};
-  orderbook->receive_message(buy_msg);
-
-  auto ask_result = orderbook->get_best_ask();
-  ASSERT_TRUE(ask_result.has_value());
-  EXPECT_EQ((std::pair<int, size_t>{105, 1}), ask_result.value());
-
-  // Bid quantity should be completely matched, no leftover bid
-  EXPECT_EQ(std::nullopt, orderbook->get_best_bid());
-}
-
-TEST_F(OrderbookCoreTest, TestFillOrKillValid) {
-  NewOrderData sell_data =
-      test_utils::create_order(1, 105, 50, Direction::Sell);
-  Message sell_msg{MessageType::Order, {.new_order = sell_data}};
-  orderbook->receive_message(sell_msg);
-
-  NewOrderData buy_data = test_utils::create_order(2, 110, 50, Direction::Buy,
-                                                   OrderType::FillOrKill);
-  Message buy_msg{MessageType::Order, {.new_order = buy_data}};
-  orderbook->receive_message(buy_msg);
-
-  EXPECT_EQ(std::nullopt, orderbook->get_best_ask());
-  EXPECT_EQ(std::nullopt, orderbook->get_best_bid());
-}

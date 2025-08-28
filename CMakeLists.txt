@@ -39,7 +39,6 @@ set(HEADERS
     include/core/Direction.h
     include/core/OrderbookLevels.h
     include/core/Level.h
-    include/core/OrderType.h
     include/core/Orderbook.h
     include/core/Using.h
     include/core/Order.h
