@@ -1,20 +1,18 @@
 # High-Performance Orderbook
 
-A C++ limit orderbook implementation optimized for throughput, achieving **1.25M+ orders/second** with microsecond latency.
+A C++ limit orderbook implementation optimized for throughput, achieving **1.89M+ orders/second** with microsecond latency.
 
 ## Features
 
 - **Limit Orders**: Buy and sell orders with price-time priority matching
-- **O(1) Order Cancellation**: Using iterator-based removal
 - **Object Pooling**: Pre-allocated order memory to avoid heap allocations
 - **Optimized Matching Engine**: Branch prediction hints and flattened loops
-- **Comprehensive Benchmarking**: Throughput and latency measurement suite
 
 ## Performance
 
 | Operation       | Throughput        |
 | --------------- | ----------------- |
-| Order Insertion | ~1.25M orders/sec |
+| Order Insertion | ~1.89M orders/sec |
 
 _Benchmarked on 8x2400MHz CPU with 64KB L1 cache_
 
@@ -44,9 +42,9 @@ Orderbook
 
 **Key Data Structures:**
 
-- `boost::container::flat_map` for price levels (O(log n) insertion)
-- `std::list` for order queues at each price (O(1) removal)
-- `std::unordered_map` for order ID lookups (O(1) cancellation)
+- `std::map` for price levels
+- `std::deque` for order queues at each price
+- `std::unordered_map` for order ID lookups
 
 ## Usage
 
@@ -70,7 +68,6 @@ auto best_ask = orderbook.get_best_ask();
 
 ## Dependencies
 
-- **Boost**: Container and circular buffer libraries
 - **Google Benchmark**: Performance measurement
 - **GTest**: Unit testing
 - **CMake + Conan**: Build system

@@ -24,7 +24,6 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-find_package(Boost REQUIRED COMPONENTS container)
 
 add_executable(myapp 
     src/main.cpp 
@@ -33,7 +32,6 @@ add_executable(myapp
     src/core/OrderPool.cpp
 )
 
-target_link_libraries(myapp Boost::boost)
 
 set(HEADERS
     include/core/Direction.h
@@ -74,7 +72,6 @@ if(benchmark_FOUND)
     )
     
     target_link_libraries(benchmarks benchmark::benchmark)
-    target_link_libraries(benchmarks Boost::boost)
     target_include_directories(benchmarks PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
     
     # Add perf profiling target

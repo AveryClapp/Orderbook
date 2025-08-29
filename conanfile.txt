@@ -1,5 +1,4 @@
 [requires]
-boost/1.88.0
 benchmark/1.9.4
 gtest/1.14.0
 
