@@ -29,70 +29,50 @@ void Orderbook::receive_message(const Message &msg) {
   }
 }
 
-inline void Orderbook::handle_sell(Order *sell_order) {
-  auto &bids = levels_.get_bids();
-  auto it = bids.begin();
-  while (sell_order->quantity > 0 && it != bids.end()) {
-    auto &[price, level] = *it;
-    if (price < sell_order->price) {
-      break;
-    }
-    while (sell_order->quantity > 0) {
-      if (level.orders.empty())
-        break;
-      Order *const order = level.orders.front();
-      Quantity consumed = std::min(order->quantity, sell_order->quantity);
-      order->quantity -= consumed;
-      sell_order->quantity -= consumed;
-      level.total_quantity -= consumed;
-      if (order->quantity == 0) {
-        level.orders.pop_front();
-        order_map_.erase(order->id);
-        order_pool_.release(order);
-      }
-    }
-    if (level.orders.empty()) {
-      it = bids.erase(it);
-    } else {
-      ++it;
-    }
-  }
-  if (sell_order->quantity > 0) {
-    levels_.add_ask(sell_order);
-    order_map_[sell_order->id] = sell_order;
-  } else {
-    order_pool_.release(sell_order);
-  }
-}
-
 inline void Orderbook::handle_buy(Order *buy_order) {
   auto &asks = levels_.get_asks();
   auto it = asks.begin();
+
   while (buy_order->quantity > 0 && it != asks.end()) {
     auto &[price, level] = *it;
-    if (price > buy_order->price) {
+
+    if (price > buy_order->price)
       break;
+
+    if (level.orders.empty()) {
+      it = asks.erase(it);
+      continue;
     }
-    while (buy_order->quantity > 0) {
-      if (level.orders.empty())
-        break;
-      Order *const order = level.orders.front();
-      Quantity consumed = std::min(order->quantity, buy_order->quantity);
-      order->quantity -= consumed;
-      buy_order->quantity -= consumed;
-      level.total_quantity -= consumed;
-      if (order->quantity == 0) {
+
+    Order *sell_order = level.orders.front();
+
+    if (sell_order->quantity >= buy_order->quantity) [[likely]] {
+      sell_order->quantity -= buy_order->quantity;
+      level.total_quantity -= buy_order->quantity;
+      buy_order->quantity = 0;
+
+      if (sell_order->quantity == 0) {
         level.orders.pop_front();
-        order_map_.erase(order->id);
-        order_pool_.release(order);
+        order_map_.erase(sell_order->id);
+        order_pool_.release(sell_order);
       }
+
+    } else [[unlikely]] {
+      buy_order->quantity -= sell_order->quantity;
+      level.total_quantity -= sell_order->quantity;
+
+      level.orders.pop_front();
+      order_map_.erase(sell_order->id);
+      order_pool_.release(sell_order);
     }
+
     if (level.orders.empty()) {
       it = asks.erase(it);
     } else {
       ++it;
     }
   }
+
   if (buy_order->quantity > 0) {
     levels_.add_bid(buy_order);
     order_map_[buy_order->id] = buy_order;
@@ -101,6 +81,57 @@ inline void Orderbook::handle_buy(Order *buy_order) {
   }
 }
 
+inline void Orderbook::handle_sell(Order *sell_order) {
+  auto &bids = levels_.get_bids();
+  auto it = bids.begin();
+
+  while (sell_order->quantity > 0 && it != bids.end()) {
+    auto &[price, level] = *it;
+
+    if (price < sell_order->price)
+      break;
+
+    if (level.orders.empty()) {
+      it = bids.erase(it);
+      continue;
+    }
+
+    Order *buy_order = level.orders.front();
+
+    if (buy_order->quantity >= sell_order->quantity) [[likely]] {
+      buy_order->quantity -= sell_order->quantity;
+      level.total_quantity -= sell_order->quantity;
+      sell_order->quantity = 0;
+
+      if (buy_order->quantity == 0) {
+        level.orders.pop_front();
+        order_map_.erase(buy_order->id);
+        order_pool_.release(buy_order);
+      }
+
+    } else [[unlikely]] {
+      sell_order->quantity -= buy_order->quantity;
+      level.total_quantity -= buy_order->quantity;
+
+      level.orders.pop_front();
+      order_map_.erase(buy_order->id);
+      order_pool_.release(buy_order);
+    }
+
+    if (level.orders.empty()) {
+      it = bids.erase(it);
+    } else {
+      ++it;
+    }
+  }
+
+  if (sell_order->quantity > 0) {
+    levels_.add_ask(sell_order);
+    order_map_[sell_order->id] = sell_order;
+  } else {
+    order_pool_.release(sell_order);
+  }
+}
 inline void Orderbook::handle_cancel(const ID cancel_id) {
   assert(order_map_.find(cancel_id) != order_map_.end());
   Order *order = order_map_[cancel_id];

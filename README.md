@@ -1,42 +1,80 @@
-# Orderbook
+# High-Performance Orderbook
 
-## Overview
+A C++ limit orderbook implementation optimized for throughput, achieving **1.25M+ orders/second** with microsecond latency.
 
-This order matching engine is designed for high-frequency trading environments where microsecond latency matters. It implements multiple matching algorithms and supports various order types commonly used in modern electronic exchanges. Currently, this is just for Limit order books.
+## Features
 
-## Iterative Benchmarking
+- **Limit Orders**: Buy and sell orders with price-time priority matching
+- **O(1) Order Cancellation**: Using iterator-based removal
+- **Object Pooling**: Pre-allocated order memory to avoid heap allocations
+- **Optimized Matching Engine**: Branch prediction hints and flattened loops
+- **Comprehensive Benchmarking**: Throughput and latency measurement suite
 
-With the goal of making this as fast as possible, I figured it would be a good idea to document the journey from making this fast as possible starting from a working version. This starts with no explicit optimizations and then goes through step by step what I refined to improve performance. For the sake of brevity, I will analyze just the first (smallest) case for each benchmark output.
+## Performance
 
-Some Specs:
+| Operation       | Throughput        |
+| --------------- | ----------------- |
+| Order Insertion | ~1.25M orders/sec |
 
-- L1 Data Cache: 64 KiB
-- L1 Instruction Cache: 124 KiB
-- L2 Data Cache: 4096 KiB
-- 8 x 2400 MHz CPUs (more on this later)
+_Benchmarked on 8x2400MHz CPU with 64KB L1 cache_
 
-### Iteration 1: The Starting Point
+## Quick Start
 
-AddOrdersEmpty: 1162 ns  
-AddOrdersPopulated: 1264 ns  
-OrderMatching: 989 ns  
-BestBidAsk: 1.19 ns  
-OrderCancellation: 913 ns
+```bash
+# Install dependencies
+conan install . --output-folder=build --build=missing
 
-### Iteration 2: Order Pooling
+# Build
+cmake --preset conan-default
+cmake --build --preset conan-release
 
-AddOrdersEmpty: 1089 ns
-AddOrdersPopulated: 1214 ns  
-OrderMatching: 914 ns  
-BestBidAsk: 1.19 ns  
-OrderCancellation: 890 ns
+# Run benchmarks
+./build/benchmarks
+```
 
-### Iteration 3: Cache Friendliness & Optimized Condition Checks
+## Architecture
 
-AddOrdersEmpty: 1056 ns
-AddOrdersPopulated: 1185 ns  
-OrderMatching: 1169 ns  
-BestBidAsk: 1.19 ns  
-OrderCancellation: 886 ns
+```
+Orderbook
+├── OrderbookLevels    # Price level management
+├── OrderPool          # Memory pool for orders
+├── Level              # Price level with order queue
+└── Order              # Individual order representation
+```
 
-### Iteration 4: 
+**Key Data Structures:**
+
+- `boost::container::flat_map` for price levels (O(log n) insertion)
+- `std::list` for order queues at each price (O(1) removal)
+- `std::unordered_map` for order ID lookups (O(1) cancellation)
+
+## Usage
+
+```cpp
+Orderbook orderbook;
+
+// Create and send order
+NewOrderData order = {1, 100, 50, Direction::Buy}; // id, price, qty, side
+Message msg{MessageType::Order, {.new_order = order}};
+orderbook.receive_message(msg);
+
+// Cancel order
+CancelData cancel = {1}; // order id
+Message cancel_msg{MessageType::Cancel, {.cancel = cancel}};
+orderbook.receive_message(cancel_msg);
+
+// Get best prices
+auto best_bid = orderbook.get_best_bid();
+auto best_ask = orderbook.get_best_ask();
+```
+
+## Dependencies
+
+- **Boost**: Container and circular buffer libraries
+- **Google Benchmark**: Performance measurement
+- **GTest**: Unit testing
+- **CMake + Conan**: Build system
+
+## License
+
+MIT
