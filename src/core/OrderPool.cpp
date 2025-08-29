@@ -1,6 +1,5 @@
 #include "include/core/OrderPool.h"
 #include <cstddef>
-#include <iostream>
 #include <vector>
 
 OrderPool::OrderPool(size_t num) {
@@ -31,7 +30,6 @@ std::ptrdiff_t OrderPool::get_index(Order *order) {
 }
 
 void OrderPool::grow() {
-  std::cout << "growing" << "\n";
   size_t old_size = pool_.size();
   size_t new_size = old_size * 2;
 

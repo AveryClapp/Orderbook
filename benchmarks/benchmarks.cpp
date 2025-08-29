@@ -12,7 +12,7 @@ static void BM_PureInsertionThroughput(benchmark::State &state) {
 
     Orderbook orderbook;
     std::vector<Message> orders;
-    orders.reserve(num_orders);
+    orders.reserve(static_cast<size_t>(num_orders));
 
     std::mt19937 gen(42);
     std::uniform_int_distribution<Price> price_dist(9000, 11000);

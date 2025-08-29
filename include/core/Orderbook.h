@@ -22,11 +22,9 @@ private:
 
   std::unordered_map<ID, Order *, IDHash> order_map_;
 
-  void handle_buy(Order *order);
-  void handle_sell(Order *order);
-  void handle_cancel(const ID cancel_id);
-
-  bool can_fill(const NewOrderData &order);
+  inline void handle_buy(Order *order);
+  inline void handle_sell(Order *order);
+  inline void handle_cancel(const ID cancel_id);
 
 public:
   Orderbook();
