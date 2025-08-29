@@ -1,5 +1,6 @@
 #include "include/core/OrderPool.h"
 #include <cstddef>
+#include <iostream>
 #include <vector>
 
 OrderPool::OrderPool(size_t num) {
@@ -12,6 +13,9 @@ OrderPool::OrderPool(size_t num) {
 }
 
 Order *OrderPool::get() {
+  if (free_list_.empty()) [[unlikely]] {
+    grow();
+  }
   size_t next_available = free_list_.back();
   free_list_.pop_back();
   return &pool_[next_available];
@@ -24,4 +28,17 @@ void OrderPool::release(Order *order) {
 std::ptrdiff_t OrderPool::get_index(Order *order) {
   // C++ implicitly divides by sizeof(Order) here
   return order - pool_.data();
+}
+
+void OrderPool::grow() {
+  std::cout << "growing" << "\n";
+  size_t old_size = pool_.size();
+  size_t new_size = old_size * 2;
+
+  pool_.resize(new_size);
+  free_list_.reserve(new_size);
+
+  for (size_t i = new_size; i > old_size; --i) {
+    free_list_.push_back(i - 1);
+  }
 }

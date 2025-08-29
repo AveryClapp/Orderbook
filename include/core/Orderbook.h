@@ -8,7 +8,7 @@
 #include <optional>
 #include <unordered_map>
 
-#define POOL_SIZE 10000
+#define POOL_SIZE 999999
 
 // Custom hash since all IDs are unique
 struct IDHash {
