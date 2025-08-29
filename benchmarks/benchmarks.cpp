@@ -10,15 +10,13 @@ public:
 };
 
 static void BM_SingleOrderLatency(benchmark::State &state) {
-  OrderbookFixture fixture;
-
-  ID order_id = 1;
-  Price start_price = 1;
   for (auto _ : state) {
-    NewOrderData order = test_utils::create_order(order_id++, start_price + 1,
-                                                  10, Direction::Buy);
-    Message msg{MessageType::Order, {.new_order = order}};
+    state.PauseTiming();
+    OrderbookFixture fixture;
+    state.ResumeTiming();
 
+    NewOrderData order = test_utils::create_order(1, 100, 10, Direction::Buy);
+    Message msg{MessageType::Order, {.new_order = order}};
     fixture.orderbook.receive_message(msg);
     benchmark::DoNotOptimize(fixture.orderbook);
   }

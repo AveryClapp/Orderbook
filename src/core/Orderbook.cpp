@@ -102,6 +102,7 @@ inline void Orderbook::handle_buy(Order *buy_order) {
 }
 
 inline void Orderbook::handle_cancel(const ID cancel_id) {
+  assert(order_map_.find(cancel_id) != order_map_.end());
   Order *order = order_map_[cancel_id];
   Level &target_level = (order->direction == Direction::Buy)
                             ? levels_.get_bids()[order->price]

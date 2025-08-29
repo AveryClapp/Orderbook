@@ -11,6 +11,7 @@ private:
 
 public:
   OrderPool(size_t num);
+  ~OrderPool() = default;
 
   Order *get();
 
