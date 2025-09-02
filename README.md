@@ -1,4 +1,4 @@
-# High-Performance Orderbook
+# Orderbook
 
 A C++ limit orderbook implementation optimized for throughput, achieving **1.89M+ orders/second** with microsecond latency.
 
