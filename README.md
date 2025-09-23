@@ -71,7 +71,3 @@ auto best_ask = orderbook.get_best_ask();
 - **Google Benchmark**: Performance measurement
 - **GTest**: Unit testing
 - **CMake + Conan**: Build system
-
-## License
-
-MIT
