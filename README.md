@@ -8,14 +8,6 @@ A C++ limit orderbook implementation optimized for throughput, achieving **1.89M
 - **Object Pooling**: Pre-allocated order memory to avoid heap allocations
 - **Optimized Matching Engine**: Branch prediction hints and flattened loops
 
-## Performance
-
-| Operation       | Throughput        |
-| --------------- | ----------------- |
-| Order Insertion | ~1.89M orders/sec |
-
-_Benchmarked on 8x2400MHz CPU with 64KB L1 cache_
-
 ## Quick Start
 
 ```bash
